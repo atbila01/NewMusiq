@@ -51,3 +51,4 @@
 - Promoted 586ef79926ff29b70162426b157ff561aa8ec096 to Makayla without force-pushing. Vercel production D9vgaYDuABkGT3YQwNhiiV5MPFMe verified Ready at that exact revision; public HTTP 200 serves /assets/index-BWgcpHrO.js, matching the tested build.
 - A transaction under the authenticated database role confirmed {role: admin, complimentary: true} and successful comment insertion, then rolled back all test data.
 - The separate experience-admin function remains undeployed; its source now also refuses role changes. This change does not enable account deletion, subscription cancellation, People management or unfinished AI services.
+- Live browser verification used the already signed-in ordinary account: Settings loaded and correctly omitted Admin. No credentials were requested or used to sign into the two privileged accounts; their positive authorization was verified under the authenticated database role, not by a visual login session.
