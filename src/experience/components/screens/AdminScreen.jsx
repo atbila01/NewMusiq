@@ -3,7 +3,9 @@ import Screen from "./Screen"
 import { Comments, Users } from "../AdminPage"
 import { useApi, useProfile } from "@experience/lib/profile"
 
-const TABS = ["Comments", "Feedback", "Subscriptions", "Content", "People"]
+import ArtistReviews from "../ArtistReviews"
+
+const TABS = ["Artists", "Comments", "Feedback", "Subscriptions", "Content", "People"]
 
 function useList(path) {
   const api = useApi()
@@ -81,9 +83,9 @@ function Content() {
 
 export default function AdminScreen() {
   const { role } = useProfile()
-  const [tab, setTab] = useState("Comments")
+  const [tab, setTab] = useState("Artists")
   if (role !== "admin") return <Screen kicker="Admin" title="Admin" testId="admin-screen"><p className="rp-muted" data-testid="admin-denied">You don't have admin access.</p></Screen>
-  const Panel = { Comments, Feedback, Subscriptions, Content, People: Users }[tab]
+  const Panel = { Artists: ArtistReviews, Comments, Feedback, Subscriptions, Content, People: Users }[tab]
   return (
     <Screen kicker="Manage NewMusiq" title="Admin" testId="admin-screen">
       <div className="search-modes">

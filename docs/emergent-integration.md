@@ -104,3 +104,24 @@ General role changes are disabled. The prepared experience-admin function also
 rejects role changes and uses the authoritative role RPC, but remains UNDEPLOYED
 under its existing approval restriction. Account deletion, cancellation and People
 management are not enabled by this change. Existing AI limitations still apply.
+
+## Administrator artist review and publication (2026-10-30)
+
+Settings > Admin > Artists now has an ownership-evidence review queue for the two
+approved administrators. Identity must already be verified by the existing ID
+provider. Approval grants artist-page ownership and creates the public catalog
+artist when needed; existing artists retain their catalog identity. Rejection
+publishes nothing. Each decision records reviewer ID, time and note. An admin's
+own claim requires review by the other admin. Repeated reviews and duplicate new
+artist names are rejected rather than creating duplicate pages.
+
+The narrow database review API replaces the older artist_reviewer flag and
+service-role review path. Evidence is restricted to the applicant and the two
+current administrators. Artist search results and /artists/:artistId pages show
+published catalog artists. This does not automatically publish their music or
+bypass identity/ownership requirements. It does not deploy experience-admin or
+change billing, accounts, map texture or place confirmation.
+
+Transactional database checks are saved in tests/sql/artist-review.sql. Run in the
+SQL editor; they roll back every fixture and decision. Release verification is
+recorded in deployment-change-log.md.

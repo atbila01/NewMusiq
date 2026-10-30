@@ -8,6 +8,7 @@ import Subscribe from "@experience/components/Subscribe"
 import { PaymentCancel, PaymentSuccess } from "@experience/components/PaymentResult"
 import PlayerScreen from "@experience/components/PlayerScreen"
 const GlobeHome = lazy(() => import("@experience/components/GlobeHome"))
+const ArtistScreen = lazy(() => import("@experience/components/screens/ArtistScreen"))
 const SearchScreen = lazy(() => import("@experience/components/screens/SearchScreen"))
 const ProfileScreen = lazy(() => import("@experience/components/screens/ProfileScreen"))
 const StudioScreen = lazy(() => import("@experience/components/screens/StudioScreen"))
@@ -66,7 +67,7 @@ function Home() {
   return <PlayerScreen />
 }
 
-const SCREENS = [["artist-access", ArtistAccessScreen], ["search", SearchScreen], ["profile", ProfileScreen], ["studio", StudioScreen], ["studio/upload", UploadScreen],
+const SCREENS = [["artists/:artistId", ArtistScreen], ["artist-access", ArtistAccessScreen], ["search", SearchScreen], ["profile", ProfileScreen], ["studio", StudioScreen], ["studio/upload", UploadScreen],
   ["settings", SettingsScreen], ["admin", AdminScreen], ["contact", ContactScreen]]
 
 function ArtistAccessScreen() {

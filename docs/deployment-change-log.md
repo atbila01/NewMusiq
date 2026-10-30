@@ -52,3 +52,11 @@
 - A transaction under the authenticated database role confirmed {role: admin, complimentary: true} and successful comment insertion, then rolled back all test data.
 - The separate experience-admin function remains undeployed; its source now also refuses role changes. This change does not enable account deletion, subscription cancellation, People management or unfinished AI services.
 - Live browser verification used the already signed-in ordinary account: Settings loaded and correctly omitted Admin. No credentials were requested or used to sign into the two privileged accounts; their positive authorization was verified under the authenticated database role, not by a visual login session.
+
+## 2026-10-30 — Artist verification review and publication
+
+- Added Settings > Admin > Artists for the two approved administrators: evidence links, identity status, review notes, explicit decision confirmation, approval/publication and rejection.
+- Applied migration 20261030124641: admin/session-authorized private review implementation, narrow client RPCs, reviewer/time audit, no self review, no unverified approval, locked pending-claim transitions, duplicate artist-name protection and restricted evidence visibility. Older reviewer metadata and service-role review calls no longer authorize reviews.
+- Approval creates the public artist catalog record when needed; catalog artists now appear in site search and /artists/:artistId pages. Music releases remain separate.
+- Eight account/discovery tests and production build passed. Nine transactional database checks passed under the authenticated role: both administrators can review; ordinary member denied; unverified identity blocked; self review blocked; verified artist published with audit; repeated approval blocked; rejection does not publish; invalid session blocked. Every fixture and decision was rolled back. Production verification pending.
+- Existing NewMusiq accounts, complimentary access, billing, night-Earth texture and place confirmation preserved. The rejected experience-admin function was not deployed.

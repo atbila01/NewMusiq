@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { Link } from "react-router-dom"
 import Screen from "./Screen"
 import Icon from "../Icon"
 import SongItem from "../SongItem"
@@ -87,6 +88,10 @@ export default function SearchScreen() {
       {busy && <p className="rp-muted">Searching…</p>}
       {res?.heard && <p className="rp-muted" data-testid="search-heard">We heard: “{res.heard}”</p>}
       {res?.message && <p className="status" data-testid="search-message">{res.message}</p>}
+      {res?.artists?.length > 0 && <section className="screen-section" data-testid="search-artists">
+        <h2>Artists on NewMusiq</h2>
+        <div className="song-list">{res.artists.map(a => <Link className="admin-row" key={a.artist_id} to={`/artists/${a.artist_id}`}>{a.name}</Link>)}</div>
+      </section>}
       {res?.releases?.length > 0 && (
         <section className="screen-section">
           <h2>On NewMusiq</h2>

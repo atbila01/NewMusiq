@@ -198,6 +198,12 @@ export async function experienceApi(path, options = {}) {
 
   if (parts[0] === 'admin' || parts[0] === 'users') {
     if ((await access()).role !== 'admin') fail('Administrator access required.', 403);
+    if (p === '/admin/artists' && method === 'GET') return response(checked(await supabase.rpc('experience_artist_claims')));
+    if (parts[1] === 'artists' && parts[2] && method === 'PATCH') {
+      if (typeof body.approve !== 'boolean' || typeof body.note !== 'string' || body.note.length > 2000) fail('Enter a valid review.');
+      checked(await supabase.rpc('review_artist_claim',{claim:parts[2],approved:body.approve,note:body.note}));
+      return response({ok:true});
+    }
     if (p === '/admin/subscriptions') return response(checked(await supabase.rpc('experience_subscription_summary')));
     if (parts[0] === 'users' && method === 'PATCH') fail('Administrator access is restricted to the two approved accounts.',403);
     if (parts[0] === 'users') { const action = method === 'PATCH' ? 'set-role' : 'list-users'; const result = checked(await supabase.functions.invoke('experience-admin',{body:{action,user_id:parts[1],role:body.role}})); if(result.error) fail(result.error); return response(result); }
@@ -210,18 +216,25 @@ export async function experienceApi(path, options = {}) {
     }
     fail('This administration action requires the NewMusiq server integration.', 503);
   }
+  if (parts[0] === 'artists' && parts[1] && method === 'GET') {
+    const id=Number(parts[1]); if(!Number.isSafeInteger(id) || id<1) fail('Artist not found.',404);
+    const artist=checked(await supabase.from('artists').select('artist_id,name').eq('artist_id',id).single());
+    const design=checked(await supabase.from('artist_page_designs').select('bio,hometown,tagline,portrait_url').eq('artist_id',id).maybeSingle());
+    return response({...artist,design});
+  }
   if (p === '/search' && method === 'GET') {
     const q = String(url.searchParams.get('q') || '').trim();
     if(q.length<2)return response({songs:[],releases:[]});
     const local = checked(await supabase.from('songs').select('song_id,name,song_artists(artists(name))').ilike('name',`%${q.replace(/[%_]/g,'')}%`).limit(30));
+    const artists=checked(await supabase.from('artists').select('artist_id,name').ilike('name',`%${q.replace(/[%_]/g,'')}%`).limit(30));
     const uploaded=(await records('track')).filter(t=>`${t.title} ${t.artist_name}`.toLowerCase().includes(q.toLowerCase()));
     const releases=[...uploaded,...(local || []).map(t=>({id:`legacy-${t.song_id}`,title:t.name,artist_name:(t.song_artists || []).map(a=>a.artists?.name).filter(Boolean).join(', ')}))];
     const {data:{session}}=await supabase.auth.getSession();
     try {
       const remote=await fetch(`/api/discovery?path=${encodeURIComponent(path)}`,{headers:{Authorization:`Bearer ${session?.access_token || ''}`}});
       const data=await remote.json();
-      return response({songs:remote.ok ? data.songs || [] : [],releases,message:remote.ok ? data.message : data.detail});
-    } catch { return response({songs:[],releases,message:'External search is unavailable. Showing your NewMusiq library.'}); }
+      return response({songs:remote.ok ? data.songs || [] : [],releases,artists,message:remote.ok ? data.message : data.detail});
+    } catch { return response({songs:[],releases,artists,message:'External search is unavailable. Showing your NewMusiq library.'}); }
   }
   // Public discovery is served by our own API; account tokens never go to Emergent.
   if (p.startsWith('/music/') || p.startsWith('/search') || p.startsWith('/geo/')) {

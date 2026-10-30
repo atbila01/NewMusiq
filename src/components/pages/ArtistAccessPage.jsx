@@ -14,7 +14,8 @@ export function ArtistAccessPage({ onArtistSelect }) {
   const [artistId, setArtistId] = useState('');
   const [evidence, setEvidence] = useState('');
   const [notes, setNotes] = useState({});
-  const reviewer = user.app_metadata?.artist_reviewer === true;
+  const [reviewer,setReviewer] = useState(false);
+  useEffect(()=>{let active=true;supabase.rpc('experience_access').then(({data,error})=>{if(active)setReviewer(!error && data?.role==='admin');});return()=>{active=false;};},[user.id]);
   const verificationEnabled = import.meta.env.VITE_ARTIST_IDENTITY_ENABLED === 'true';
   const load = async () => {
     const own = await supabase.from('artist_claims').select('*,artists(name)').eq('user_id',user.id).order('created_at',{ascending:false});
@@ -26,7 +27,7 @@ export function ArtistAccessPage({ onArtistSelect }) {
       setReviews(pending.data || []);
     }
   };
-  useEffect(() => { load().catch(() => setStatus('Could not load artist requests. Please refresh.')); }, [user.id]);
+  useEffect(() => { load().catch(() => setStatus('Could not load artist requests. Please refresh.')); }, [user.id,reviewer]);
   const run = async work => {
     setBusy(true); setStatus('');
     try { await work(); } catch(error) { setStatus(error.message || 'Request failed. Please try again.'); }
@@ -92,9 +93,9 @@ export function ArtistAccessPage({ onArtistSelect }) {
         <p>ID: {claim.identity_status} · Applicant: {claim.user_id}</p>
         <a href={claim.evidence_url} target="_blank" rel="noreferrer">View ownership evidence</a>
         <label>Review note<textarea maxLength={2000} value={notes[claim.claim_id] || ''} onChange={event=>setNotes(previous=>({...previous,[claim.claim_id]:event.target.value}))} /></label>
-        {[true,false].map(approve=><button key={String(approve)} disabled={busy || (approve && claim.identity_status !== 'verified')} onClick={()=>run(async()=>{
-          await invoke('review-artist-claim',{claimId:claim.claim_id,approve,note:notes[claim.claim_id] || ''}); await load(); setStatus('Review saved.');
-        })}>{approve ? 'Approve page access' : 'Reject request'}</button>)}
+        {[true,false].map(approve=><button key={String(approve)} disabled={busy || claim.user_id===user.id || (approve && claim.identity_status !== 'verified')} onClick={()=>run(async()=>{
+          const {error}=await supabase.rpc('review_artist_claim',{claim:claim.claim_id,approved:approve,note:notes[claim.claim_id] || ''}); if(error)throw error; await load(); setStatus('Review saved.');
+        })}>{approve ? 'Approve & publish artist' : 'Reject request'}</button>)}
       </article>)}
     </section>}
   </div>;
