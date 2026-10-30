@@ -41,3 +41,12 @@
 - https://newmusiq-gamma.vercel.app/ returned HTTP 200 with /assets/index-gRXG9t4d.js, matching the verified build.
 - Automation sync-newmusiq-site-updates is ACTIVE every 15 minutes. Computer/app availability is required; this is not instant webhook delivery.
 - The separate experience-admin production deployment remains unapproved and undeployed.
+
+## 2026-10-30 — Exclusive complimentary administrators
+
+- User approved complimentary access for aliyahbilal236@gmail.com and murphmaklane@gmail.com, with these as the only site administrators and an Admin button in Settings.
+- Applied migration 20261030123016 to the existing Supabase project: private grants bound to existing verified identities, current-session validation, authoritative role/membership RPC, and complimentary comment/audio access while retaining artist verification.
+- Replaced metadata-based frontend role checks, disabled role promotion, and removed subscription purchase prompts for complimentary accounts. Existing paid subscriptions were not canceled or modified.
+- Eight account/discovery tests and production build passed. Live database verification passed for both approved identities, an ordinary account and no-account requests; private grants are unreadable by clients and anonymous RPC execution is revoked.
+- Release promotion and exact Vercel production verification pending below.
+- The separate experience-admin function remains undeployed; its source now also refuses role changes. This change does not enable account deletion, subscription cancellation, People management or unfinished AI services.

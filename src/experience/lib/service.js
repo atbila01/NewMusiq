@@ -46,14 +46,16 @@ async function upload(user, kind, file) {
   checked(await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type }));
   return path;
 }
+async function access() { return checked(await supabase.rpc('experience_access')); }
 async function profile(user) {
+  const entitlement = await access();
   const account = checked(await supabase.from('billing_accounts').select('plan,status,trial_end,period_end').eq('user_id', user.id).maybeSingle());
   const m = user.user_metadata || {};
   const p = m.newmusiq_profile || {};
   return { user_id: user.id, email: user.email, username: p.username || m.name || user.email?.split('@')[0] || 'Listener',
     country: p.country || '', state: p.state || '', zip_code: p.zip_code || '', completed: p.completed ?? true,
     has_photo: Boolean(p.photo_path), photo_path: p.photo_path || '', show_tour: p.show_tour ?? false,
-    ...membershipForAccount(account) };
+    ...membershipForAccount(account, Date.now(), entitlement) };
 }
 export async function experienceApi(path, options = {}) {
   const user = await identity();
@@ -63,7 +65,7 @@ export async function experienceApi(path, options = {}) {
   const parts = p.split('/').filter(Boolean).map(decodeURIComponent);
   const body = json(options);
   const meta = user.user_metadata || {};
-  if (p === '/me/role') return response({ role: user.app_metadata?.role === 'admin' ? 'admin' : 'member' });
+  if (p === '/me/role') return response(await access());
   if (p === '/me' && method === 'GET') return response(await profile(user));
   if (p === '/me' && method === 'PUT') {
     const f = options.body;
@@ -93,6 +95,7 @@ export async function experienceApi(path, options = {}) {
     return response({ ...defaults, ...meta.newmusiq_settings });
   }
   if (p === '/payments/checkout') {
+    if ((await access()).complimentary) fail('Your account already has complimentary access. No subscription is needed.');
     if (!Object.hasOwn(BILLING_PLANS, body.plan)) fail('Choose a NewMusiq plan.');
     const data = checked(await supabase.functions.invoke('billing', { body: { action: 'checkout', plan: body.plan } }));
     if (data.error) fail(data.error);
@@ -194,8 +197,9 @@ export async function experienceApi(path, options = {}) {
   }
 
   if (parts[0] === 'admin' || parts[0] === 'users') {
-    if (user.app_metadata?.role !== 'admin') fail('Administrator access required.', 403);
+    if ((await access()).role !== 'admin') fail('Administrator access required.', 403);
     if (p === '/admin/subscriptions') return response(checked(await supabase.rpc('experience_subscription_summary')));
+    if (parts[0] === 'users' && method === 'PATCH') fail('Administrator access is restricted to the two approved accounts.',403);
     if (parts[0] === 'users') { const action = method === 'PATCH' ? 'set-role' : 'list-users'; const result = checked(await supabase.functions.invoke('experience-admin',{body:{action,user_id:parts[1],role:body.role}})); if(result.error) fail(result.error); return response(result); }
     const kind = { comments: 'comment', feedback: 'feedback', tracks: 'track' }[parts[1]];
     if (kind && method === 'GET') return response((await records(kind)).filter(r => !url.searchParams.get('status') || r.status===url.searchParams.get('status')).map(r => ({...r,is_deleted:r.status==='hidden'})));

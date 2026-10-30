@@ -69,7 +69,7 @@ export function Users() {
       {data?.users.map((u) => (
         <article className="admin-row" key={u.user_id} data-testid="admin-user-row">
           <div><strong>{u.username || "(no profile)"}</strong> <span>{u.email}</span></div>
-          <select value={u.role} onChange={(e) => change(u.user_id, e.target.value)} data-testid={`admin-role-${u.user_id}`}>
+          <select disabled title="Administrator access is restricted to the two approved accounts" value={u.role} onChange={(e) => change(u.user_id, e.target.value)} data-testid={`admin-role-${u.user_id}`}>
             {data.roles.map((r) => <option key={r} value={r}>{r}</option>)}
           </select>
         </article>

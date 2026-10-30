@@ -9,7 +9,7 @@ Deno.serve(async req => {
   try {
     const url = Deno.env.get('SUPABASE_URL')!;
     const token = (req.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
-    const auth = createClient(url, Deno.env.get('SUPABASE_ANON_KEY')!, { auth: { persistSession: false } });
+    const auth = createClient(url, Deno.env.get('SUPABASE_ANON_KEY')!, { global: { headers: { Authorization: `Bearer ${token}` } }, auth: { persistSession: false } });
     const { data, error } = await auth.auth.getUser(token);
     if (error || !data.user) return json({ error: 'Please sign in again.' }, 401);
     const user = data.user;
@@ -39,18 +39,12 @@ Deno.serve(async req => {
       check(await admin.auth.admin.deleteUser(user.id));
       return json({ ok: true });
     }
-    if (user.app_metadata?.role !== 'admin') return json({ error: 'Administrator access required.' }, 403);
+    if (check(await auth.rpc('experience_access'))?.role !== 'admin') return json({ error: 'Administrator access required.' }, 403);
     if (body.action === 'list-users') {
       const users = check(await admin.auth.admin.listUsers({ page: 1, perPage: 1000 })).users;
       return json({ roles: ['admin', 'member'], users: users.map((u: any) => ({ user_id: u.id, username: u.user_metadata?.name || '', email: u.email || '', role: u.app_metadata?.role === 'admin' ? 'admin' : 'member' })) });
     }
-    if (body.action === 'set-role') {
-      if (!['member', 'admin'].includes(body.role) || typeof body.user_id !== 'string') return json({ error: 'Choose a valid user and role.' }, 400);
-      if (body.user_id === user.id) return json({ error: 'Ask another administrator to change your own role.' }, 400);
-      const target = check(await admin.auth.admin.getUserById(body.user_id)).user;
-      check(await admin.auth.admin.updateUserById(target.id, { app_metadata: { ...target.app_metadata, role: body.role } }));
-      return json({ ok: true });
-    }
+    if (body.action === 'set-role') return json({ error: 'Administrator access is restricted to the two approved accounts.' }, 403);
     return json({ error: 'Unknown action.' }, 400);
   } catch (err) { return json({ error: err instanceof Error ? err.message : 'The account service is unavailable.' }, 400); }
 });

@@ -18,3 +18,13 @@ test('expired or invalid trial and subscription periods do not grant access', ()
   }
   assert.equal(membershipForAccount({plan:'listener',status:'trialing',trial_end:'2026-11-30T00:00:00Z'},now).plan_level,2);
 });
+
+test('complimentary server entitlement unlocks all membership tiers without a paid plan', () => {
+  const access = membershipForAccount({plan:'artist',status:'canceled'},now,{complimentary:true});
+  assert.equal(access.plan_level,3);
+  assert.equal(access.browsing,false);
+  assert.equal(access.plan,null);
+  assert.equal(access.complimentary,true);
+  assert.equal(membershipForAccount({complimentary:true,role:'admin'},now).plan_level,0);
+  assert.equal(membershipForAccount(null,now,{complimentary:'true'}).plan_level,0);
+});

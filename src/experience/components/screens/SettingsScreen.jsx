@@ -23,7 +23,7 @@ export default function SettingsScreen() {
   const api = useApi()
   const navigate = useNavigate()
   const { signOut } = useClerk()
-  const { profile } = useProfile()
+  const { profile, role } = useProfile()
   const [s, setS] = useState(null)
   const [saved, setSaved] = useState("")
 
@@ -50,6 +50,9 @@ export default function SettingsScreen() {
             <Row title="Plan" hint={profile?.plan_name || "No plan"}>
               <button type="button" className="ghost-btn" onClick={() => navigate("/subscribe")} data-testid="settings-manage-plan">Manage plan</button>
             </Row>
+            {role === "admin" && <Row title="Administration" hint="Manage NewMusiq">
+              <button type="button" className="ghost-btn" onClick={() => navigate("/admin")} data-testid="settings-admin">Admin</button>
+            </Row>}
           </section>
           <section className="set-group">
             <h2>Playback</h2>

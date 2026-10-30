@@ -28,11 +28,12 @@ export function ProfileProvider({ children }) {
 
   const refresh = useCallback(async () => {
     setError("")
+    setRole("member")
     try {
       const data = await (await api("/me")).json()
       setProfile(data)
       loadPhoto(data.has_photo)
-      api("/me/role").then((r) => r.json()).then((d) => setRole(d.role)).catch(() => {})
+      api("/me/role").then((r) => r.json()).then((d) => setRole(d.role)).catch(() => setRole("member"))
       return data
     } catch (e) {
       setError("We couldn't load your account. Please try again.")

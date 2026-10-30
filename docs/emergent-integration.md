@@ -84,3 +84,23 @@ The project's Supabase MCP URL is registered in Codex. Two login attempts failed
 with OAuth metadata-discovery response-decoding errors; configuration does not
 prove authenticated tool availability. The SQL editor was used as the authorized
 fallback.
+
+## Complimentary administrators (2026-10-30)
+
+The user explicitly approved complimentary membership and exclusive site administrator
+access for aliyahbilal236@gmail.com and murphmaklane@gmail.com. Both existing email
+identities were confirmed in Supabase before applying migration 20261030123016.
+A private allowlist binds the grants to those existing user IDs and verified email
+addresses. Every privileged check requires a current database session. Client
+metadata, stale JWT roles and profile fields cannot grant this access.
+
+The experience_access RPC supplies membership and role to the UI. Settings offers
+Admin only to these administrators; paid membership prompts are removed for their
+accounts. Comment/audio policies honor complimentary access. Publishing still
+requires verified artist ownership. Billing records and paid subscriptions are
+unchanged; existing subscribers must cancel separately if desired.
+
+General role changes are disabled. The prepared experience-admin function also
+rejects role changes and uses the authoritative role RPC, but remains UNDEPLOYED
+under its existing approval restriction. Account deletion, cancellation and People
+management are not enabled by this change. Existing AI limitations still apply.
