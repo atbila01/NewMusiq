@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
-import { useAudio } from '../../context/AudioContext';
 
 export function ArtistAccessPage({ onArtistSelect }) {
   const { user } = useAuth();
-  const { supabaseArtists } = useAudio();
+  const [supabaseArtists, setSupabaseArtists] = useState([]);
+  useEffect(() => { let active=true; supabase.from('artists').select('*').then(({data,error})=>{if(active && !error)setSupabaseArtists(data || []);}); return()=>{active=false;}; }, []);
   const [claims, setClaims] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [status, setStatus] = useState('');

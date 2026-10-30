@@ -15,7 +15,7 @@ const regions = [
 ];
 const worldBounds = [[-85.05112878, -180], [85.05112878, 180]];
 
-export function WorldMapPage() {
+export function WorldMapPage({ onPlaceSelect, targetLocation }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState('');
@@ -183,6 +183,14 @@ export function WorldMapPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!targetLocation || !mapRef.current) return;
+    const { latitude, longitude, label } = targetLocation;
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)
+      || Math.abs(latitude) > 85.05112878 || Math.abs(longitude) > 180) return;
+    setPendingPlace({ name: label || 'this place', point: [latitude, longitude], zoom: 7 });
+  }, [targetLocation]);
+
   const chooseRegion = (region) => {
     setPendingPlace({ name: region.name, point: region.center, zoom: 5, region: true });
   };
@@ -192,6 +200,11 @@ export function WorldMapPage() {
     setFocusPoint(pendingPlace.point);
     focusMarkerRef.current?.setLatLng(pendingPlace.point).addTo(mapRef.current);
     if (pendingPlace.zoom) mapRef.current.flyTo(pendingPlace.point, pendingPlace.zoom, { duration: 0.7 });
+    onPlaceSelect?.({
+      name: pendingPlace.name,
+      latitude: pendingPlace.point[0],
+      longitude: pendingPlace.point[1],
+    });
     setPendingPlace(null);
   };
   const scaleLabel = zoom <= 3 ? 'World' : zoom <= 7 ? 'Region' : zoom <= 12 ? 'City' : 'Street';

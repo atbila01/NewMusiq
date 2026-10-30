@@ -1,0 +1,20 @@
+.nm-auth-form { width:100%; display:grid; gap:18px; }
+.nm-auth-form label { display:grid; gap:8px; }
+.nm-auth-form a { color:#e4bc66; }
+.nm-password { display:flex; gap:8px; }
+.nm-password input { min-width:0; flex:1; }
+.nm-auth-form input,.nm-auth-form button { padding:12px; border-radius:8px; }
+.nm-auth-form input { border:1px solid #5a4526; background:#161a22; color:#fff7eb; width:100%; }
+.nm-auth-form button { background:#dfb55e; color:#17120a; cursor:pointer; border:0; }
+.nm-auth-form .search-modes a { padding:8px 12px; border:1px solid #806534; border-radius:8px; }
+.nm-auth-form .search-modes .active { background:#dfb55e; color:#17120a; }
+.nm-billing { padding:32px; min-height:100vh; color:#f7eddc; background:#11171d; }
+.nm-billing a { color:#dfb55e; }
+.nm-billing .subscription-plans { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; }
+.nm-billing .subscription-plan { padding:28px; border:1px solid #66532c; border-radius:16px; }
+.nm-billing button { padding:12px; border:0; border-radius:8px; background:#dfb55e; color:#17120a; }
+.plan-picker { display:grid; gap:20px; }
+.plan-card { padding:24px; border:1px solid #735b32; border-radius:16px; background:#161a22; color:#f7eddc; text-align:left; }
+.plan-card.selected { outline:2px solid #dfb55e; }
+
+.artist-access-page {padding:32px;color:#f7eddc;} .artist-access-page label {display:grid;gap:8px;margin:16px 0;} .artist-access-page input,.artist-access-page select {padding:12px;background:#161a22;color:#fff;border:1px solid #705b33;border-radius:8px;} .artist-access-page button {padding:12px;border-radius:8px;background:#dfb55e;color:#17120a;}
