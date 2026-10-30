@@ -1,0 +1,56 @@
+{
+  "summary": "Iteration 2 full-stack test of NewMusiq: split sign-in/sign-up pages, plan picker, complete-profile -> Stripe checkout, REAL Stripe test payment (4242) -> /payment/success -> plan activated, plan gating (comments/tracks), Artist Studio upload + New Releases playback, edit profile + change subscription + delete account (throwaway user), globe state borders on Kentucky search, NM logo animation, mobile account menu. Backend 31/31 pytest pass. Frontend flows mostly pass; 1 HIGH mobile bug (account menu under globe, not tappable) and 1 HIGH-ish backend robustness issue (object-storage failure -> raw 500 on track upload).",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "POST /api/tracks (also PUT /api/me photo, GET /api/tracks/{id}/audio|cover, GET /api/me/photo)", "issue": "Emergent object storage intermittently returned 500 (requests.HTTPError for integrations.emergentagent.com/objstore/.../tracks/...mp3). storage.put_object/get_object exceptions are not caught -> unhandled 500 'Exception in ASGI application'. Unhandled 500 bypasses CORS headers so the browser just sees a network error; in UI the Artist Studio sat on 'Uploading...' for >30s. Retrying 3x via curl succeeded (0.3-3s), so it is intermittent. Wrap storage calls in try/except requests.RequestException -> HTTPException(502, 'Upload failed, please try again') and maybe retry once.", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "DELETE /api/me", "issue": "Works (profile removed, Clerk user 404). But a still-unexpired JWT of the deleted user gets 200 from GET /api/me with an empty profile (no Clerk lookup). Acceptable since Clerk session tokens are short-lived; just noting."},
+      {"endpoint": "GET /api/payments/status/{session_id}", "issue": "Unauthenticated; any caller with a session id can poll it (it only reflects Stripe truth, low risk)."},
+      {"endpoint": "billing.py", "issue": "stripe.api_key falls back to hardcoded 'sk_test_emergent' when env missing (guideline: no defaults, fail fast)."},
+      {"endpoint": "Stripe Checkout branding", "issue": "Checkout page shows merchant name 'plug-fax-clone' instead of NewMusiq (Stripe account display name)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Mobile header account menu (PlayerScreen .mobile-account)", "issue": "At 390px the dropdown opens BEHIND the globe: .player-header has position:relative; z-index:1 (styles.css:705) which traps the menu's z-index:30 in a low stacking context; .player-content / .globe-zoom-controls (z 6) / earth-canvas paint above it. elementFromPoint on Edit profile -> 'player-content', Change plan / Sign out -> 'earth-canvas'; a real Playwright click on Change plan times out. Only JS el.click() works. Fix: give .player-header a higher z-index (e.g. 20-50) at least on mobile, or portal the menu. Also menu has no outside-click/Escape close.", "selector": "[data-testid=mobile-account-menu-change-plan], [data-testid=mobile-account-menu-sign-out], [data-testid=mobile-account-menu-edit-profile]", "priority": "HIGH"}
+    ],
+    "integration_issues": [
+      {"flow": "Artist Studio publish", "issue": "When backend storage fails, status stays 'Uploading...' a long time and ends with a generic network error (see backend critical). On a healthy retry, publish works: 'Published! Your track is live.', appears in Your tracks and in Search > New Releases.", "affected_selectors": ["[data-testid=studio-status]", "[data-testid=studio-publish-button]"]},
+      {"flow": "Change plan for Artist (top plan)", "issue": "Subscribe initial selection for current=artist falls back to localStorage nm_plan (e.g. 'standard'), so the page opens with Standard preselected and one click on Continue immediately creates a DOWNGRADE checkout. Consider no preselection or preselect current plan and require an explicit choice.", "affected_selectors": ["[data-testid=subscribe-continue-button]", "[data-testid=plan-option-standard]"]}
+    ],
+    "design_issues": [
+      {"screen": "Sign-in", "issues": ["Two sign-up prompts: Clerk card footer 'Don't have an account? Sign up' plus custom 'New to NewMusiq? Create an Account'. Hide Clerk footerAction via appearance if only the custom link is wanted.", "Large empty gap (~120px) between NewMusiq wordmark and 'YOUR MUSIC HOME' on desktop."]},
+      {"screen": "Gold gradient buttons (Continue to Payment, Save Changes, Start Listening, track Play)", "issues": ["White/cream text on light gold gradient has low contrast; use dark text (#1a1208) like the Clerk Continue button."]},
+      {"screen": "Globe Kentucky search", "issues": ["State borders correctly hidden at default view and visible (thin, dark) after search, but Kentucky is not centered: after 15s settle the view center sits around the Gulf of Mexico/Florida and Kentucky is in the upper-left quadrant (~10-12 deg latitude offset)."]},
+      {"screen": "Home player", "issues": ["Playing a New Release track does not pause the simulated 'Golden Moon' bottom player, so two 'playing' states show at once."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_plans_billing_tracks.py", "/app/backend/tests/test_newmusiq_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "HIGH: Fix mobile account menu stacking (raise .player-header z-index above .player-content/globe controls) so Edit profile / Change plan / Sign out are tappable at 390px",
+    "HIGH: Catch object storage errors in tracks.py/server.py (put_object/get_object) and return 502 with a friendly message (optionally retry once); unhandled 500s also lose CORS headers",
+    "Subscribe page: avoid preselecting a downgrade for Artist users (no preselection or require explicit choice)",
+    "Improve contrast of text on gold gradient buttons",
+    "Optionally hide Clerk's own 'Sign up' footer on /sign-in to avoid duplicate link; tighten wordmark gap",
+    "Center globe on searched region (Kentucky ends up upper-left)",
+    "Pause demo player when a release track plays (or vice versa)",
+    "Remove hardcoded stripe.api_key fallback"
+  ],
+  "critical_code_review_comments": [
+    "storage.py put_object/get_object raise requests.HTTPError unhandled in all callers -> 500 without CORS",
+    "PaymentSuccess polls an unauthenticated status endpoint; fine, but consider requiring auth and checking tx.user_id",
+    "Subscribe.jsx initial plan logic: current==='artist' -> getSavedPlan() which is usually a lower plan",
+    "ArtistStudio.remove() swallows delete errors silently (no user feedback)",
+    "AccountMenu has no outside-click / Escape handling (both sidebar and mobile)",
+    "Upgrade via activate() cancels old sub without proration - user pays full new price immediately (business decision, confirm intent)"
+  ],
+  "updated_files": ["/app/backend/tests/test_newmusiq_api.py (display_name->username, comments tests now set pro plan, no-plan comment expects 403)", "/app/backend/tests/test_plans_billing_tracks.py (new)", "/app/tests/fixtures/test_track.mp3 (new fixture)", "/app/memory/test_credentials.md (appended plan test users)"],
+  "success_rate": {"backend": "100% (31/31 pytest); storage intermittent 500 seen once in UI flow", "frontend": "~88% (15/17 checks; mobile menu not tappable, upload first attempt failed)"},
+  "test_credentials": "See /app/memory/test_credentials.md (appended t2* plan users)",
+  "seed_data_creation": "Mongo profiles for t2std/t2pro/t2artist/t2artistb/t2noplan/TEST_ui_payer; tracks TEST_Seed_Release and TEST_UI_Upload owned by TEST_t2artist; a few TEST_ comments (pending); 1 real Stripe test subscription for TEST_ui_payer (standard), plus a few unpaid checkout sessions. Throwaway users t2del*/t2throw* were deleted.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Run pytest /app/backend/tests (31 tests, ~25s). Use ticket sign-in (scripts/clerk_test_user.py). Stripe hosted checkout can be paid headlessly: click text 'Card', fill #cardNumber/#cardExpiry/#cardCvc/#billingName, select #billingCountry US, fill #billingAddressLine1/#billingLocality/#billingPostalCode, select #billingAdministrativeArea, then JS-click [data-testid=hosted-payment-submit-button]; success redirect lands on /payment/success. To verify mobile menu fix use real clicks (not el.click()) or elementFromPoint. Globe needs ~15s to settle after search in headless.",
+  "rca of the issue": "Mobile menu: .player-header {position:relative; z-index:1} creates a stacking context; the absolutely positioned .account-menu (z 30) can't rise above sibling .player-content (contains globe canvas and .globe-zoom-controls z 6) that comes later in DOM, so the menu is painted underneath and receives no pointer events. Upload failure: objstore returned HTTP 500 once; storage._with_retry only retries on 404 and raise_for_status propagates to FastAPI as an unhandled exception."
+}

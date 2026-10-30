@@ -1,0 +1,44 @@
+{
+  "summary": "Full backend + frontend test of the NewMusiq clone (Clerk auth). Backend: 13/13 pytest pass (/api/me 401/200 + invalid token 401, PUT /api/me validation + photo types + photo persistence, /api/me/photo bytes match and 404 for new user, comments empty/no-profile/auth checks, pending visible only to the author, geo search Paris + short query 422). Frontend at desktop 1920: /sign-in and /sign-up split layout with the Clerk card work, and the sign-up Back button works. Signing in by ticket with a completed profile lands on home (5 nav items, avatar photo, display name, globe, search, player bar), and the session survives a refresh. A new user is sent to /complete-profile (going to / also sends them back there), and the empty form shows an error. Filling the form with a photo saves it and goes home; the sidebar avatar shows the uploaded image (checked by pixel color) and is still there after reload. Clicking the track title expands the player with lyrics and comments; a posted comment shows 'Pending review'; collapse works. Globe search: 'Japan' shows 'Showing Japan', an unknown place shows 'No matching location was found.', and the zoom +/fit/- buttons click. Account menu: Edit profile opens a prefilled form titled 'Save Changes'; Sign out goes to /sign-in. Mobile 390px: bottom nav renders, but the account menu cannot be reached and the player bar is misaligned.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/geo/search", "issue": "Redundant 'import math' inside the function (math is already imported at the top). Cosmetic."},
+      {"endpoint": "/api/comments GET", "issue": "Hard limit of 20 with no pagination; fine for an MVP."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Sidebar (mobile <=760px)", "issue": ".sidebar-profile is display:none on mobile, so there is no avatar/name and no way to reach the account menu (Edit profile / Sign out). Mobile users cannot sign out or edit their profile.", "selector": "[data-testid='account-menu-button']", "priority": "HIGH"},
+      {"component": "ProfileSetup for a new user", "issue": "The Back button goes to /sign-in. SignedOutOnly sends the signed-in user to /, and Home sends them back to /complete-profile, so Back does nothing. The page has no sign-out option either, so a new user who wants to leave or switch accounts is stuck.", "selector": "[data-testid='auth-back-button']", "priority": "MEDIUM"},
+      {"component": "PlayerBar (mobile 390px)", "issue": "The player bar card is off-center: x=28, width 362, so it touches the right edge of the screen with 0 right margin. The progress thumb dot shows below the card above the bottom nav. The expanded player has the same offset.", "selector": "[data-testid='player-bar']", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [
+      {"flow": "Profile load (lib/profile.jsx refresh)", "issue": "Any failure in refresh(), including a failed /me/photo fetch (storage hiccup) or a temporary /me error, runs setProfile({completed:false}). That wrongly sends users who already have a completed profile to /complete-profile as if they were new. The photo fetch error should be caught on its own, and a /me failure should show an error or retry state.", "affected_selectors": ["[data-testid='app-loading']"]}
+    ],
+    "design_issues": [
+      {"screen": "/complete-profile", "issues": ["The photo picker circle sits flush against the left edge of the form inputs with no gap, so it looks cramped and uneven."]},
+      {"screen": "/sign-in", "issues": ["The Clerk card (withSignUp combined flow) shows no 'Don't have an account? Sign up' link. Users can only find /sign-up by typing a new email."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_newmusiq_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Mobile: make the account menu (Edit profile / Sign out) reachable, e.g. add a profile/avatar item to the bottom nav or a header avatar button",
+    "/complete-profile for a new user: add a Sign out option and fix the Back button, which currently goes nowhere",
+    "profile.jsx: catch the /me/photo failure on its own, and don't treat a /me error as completed:false",
+    "Mobile player bar: fix the horizontal offset/width so it is centered with even margins, and hide the stray progress thumb under the card",
+    "Optional: add a visible sign-up link on /sign-in; add a gap between the photo picker and the inputs"
+  ],
+  "critical_code_review_comments": [
+    "lib/profile.jsx refresh(): a single try covers /me and /me/photo, so a photo error leads to a false redirect to complete-profile",
+    "server.py: the duplicate 'import math' inside geo_search is redundant",
+    "No create/edit-profile UI for a photo larger than 5MB beyond the client-side check; the backend also checks size. Fine."
+  ],
+  "updated_files": ["/app/backend/tests/test_newmusiq_api.py"],
+  "success_rate": {"backend": "100%", "frontend": "85%"},
+  "test_credentials": "/app/memory/test_credentials.md did NOT exist. Test users are created on demand with /root/.venv/bin/python /app/scripts/clerk_test_user.py <email>. Users used: t1usera+clerk_test@example.com (completed profile, display name TEST_UserA2, 1x1 png photo), t1userb+clerk_test@example.com (TEST_UserB), plus t1fresh<ts>+clerk_test@example.com and t1new<hex>+clerk_test@example.com (fresh users).",
+  "seed_data_creation": "Clerk test users above; profiles in db.profiles; pending TEST_ comments in db.comments from user A.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Sign in with <preview>/sign-in?__clerk_ticket=<ticket>; tickets are single-use, so make a new one each run. Use page.evaluate(el.click()) because the WebGL globe slows actionability checks. Timers and debounced UI statuses lag in headless mode, so wait 3-5s before reading globe-search-status or comment-status. Run the backend regression with: /root/.venv/bin/python -m pytest /app/backend/tests/test_newmusiq_api.py"
+}
