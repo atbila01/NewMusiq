@@ -61,3 +61,10 @@
 - Eight account/discovery tests and production build passed. Nine transactional database checks passed under the authenticated role: both administrators can review; ordinary member denied; unverified identity blocked; self review blocked; verified artist published with audit; repeated approval blocked; rejection does not publish; invalid session blocked. Every fixture and decision was rolled back.
 - Production verified on the 13:01 UTC monitor run: Vercel C8DqRfxDh9AS8GvqNqhxC8a6pi3V is Ready on Makayla at ffd4690048d4ad21c58c97f664613289b748f152. Public HTTP 200 serves /assets/index-WFan1HDb.js, matching the tested build. This resolves the prior browser-verification interruption. Positive privileged actions were tested transactionally in the database; no real artist was approved during verification.
 - Existing NewMusiq accounts, complimentary access, billing, night-Earth texture and place confirmation preserved. The rejected experience-admin function was not deployed.
+
+## 2026-10-30 — Daily update monitoring
+
+- User changed sync-newmusiq-site-updates from every 15 minutes to once a day.
+- Saved a seven-day rolling average trigger: above three unique source commits per day, ask the user for a new frequency and keep daily checks until they reply.
+- Shared commits, merges and automated documentation/bookkeeping do not inflate the activity count. Quiet notification behavior and existing release restrictions are preserved.
+- Scheduling/documentation change only; no application release is needed.

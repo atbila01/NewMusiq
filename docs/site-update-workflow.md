@@ -8,7 +8,7 @@ updates after verification, superseding a brief preview-first answer.
 
 ## Active monitor
 
-Codex heartbeat `sync-newmusiq-site-updates` is active every 15 minutes in this
+Codex heartbeat `sync-newmusiq-site-updates` is active once a day in this
 chat. The computer must be awake and the desktop app running for local work.
 This is polling, not an instant webhook. Unsaved edits and ongoing uncommitted
 work are not published; completed work must be committed/pushed first.
@@ -45,3 +45,16 @@ of its permanent deletion, subscription cancellation or role-management features
 Do not deploy that function through another mechanism to bypass review.
 AI/provider integrations documented in emergent-integration.md remain incomplete;
 automatic updates must not claim they are live until separately connected/tested.
+
+## Daily cadence and commit activity
+
+On 2026-10-30 the user changed monitoring from every 15 minutes to once a day.
+At each daily run, measure unique new source commits over the rolling seven-day
+window using America/New_York day boundaries, divided by seven. Deduplicate shared
+commits and exclude merges, automated sync bookkeeping and documentation-only
+verification commits. Record the measurement and window in the ignored sync
+checkpoint or site-sync-state.json.
+
+When the average exceeds three commits per day, ask the user what update frequency
+they want. Keep the daily schedule until they answer, and record the pending
+question to avoid asking repeatedly. Unchanged checks remain quiet.

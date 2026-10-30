@@ -30,7 +30,7 @@ was superseded on 2026-10-30.
 
 ## Collaborator updates
 
-An active 15-minute Codex heartbeat monitors atbila01/NewMusiq and
+An active daily Codex heartbeat monitors atbila01/NewMusiq and
 MaknCheese04/NewMusiqMLM:Emergent. See docs/site-sync-state.json for reviewed heads.
 Port relevant Emergent frontend changes into the adapted current structure;
 never blindly replace the NewMusiq account/payment integration with fork code.
