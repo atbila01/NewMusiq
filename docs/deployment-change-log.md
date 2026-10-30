@@ -24,3 +24,12 @@
 - Live production remains Makayla. Authenticated flows and AI feature parity remain unverified/incomplete.
 - Production deployment of experience-admin was rejected by automatic approval review; explicit approval is required for deletion, subscription cancellation and role-management capabilities.
 - See emergent-integration.md for current scope and evidence.
+
+## 2026-10-30 — Automatic update workflow
+
+- User chose direct live updates after passing checks (supersedes preview-first).
+- Created active 15-minute Codex heartbeat sync-newmusiq-site-updates for this chat.
+- Monitoring both atbila01/NewMusiq and MaknCheese04/NewMusiqMLM Emergent sources.
+- Build now runs account/discovery tests before Vite, including on Vercel.
+- Reviewed current new source commits: audio fixture pointer and archived Figma deletions only; no additional app behavior to port.
+- Existing account-management deployment rejection remains in force.

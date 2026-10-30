@@ -1,0 +1,28 @@
+{
+  "production": {
+    "repository": "atbila01/NewMusiq",
+    "branch": "Makayla",
+    "vercel_project": "new-music/newmusiq",
+    "url": "https://newmusiq-gamma.vercel.app/"
+  },
+  "sources": [
+    {
+      "repository": "atbila01/NewMusiq",
+      "branch": "codex/emergent-integration",
+      "last_reviewed_commit": "015285c4367fafb173e1baed46fd8cfe267b06f8"
+    },
+    {
+      "repository": "atbila01/NewMusiq",
+      "branch": "Emergent",
+      "last_reviewed_commit": "7d56d8dade38c379f8631782523c42d79e88fc85",
+      "review": "Since 6d2aecb, only the test audio fixture changed from file to LFS pointer. No application change to port."
+    },
+    {
+      "repository": "MaknCheese04/NewMusiqMLM",
+      "branch": "Emergent",
+      "last_reviewed_commit": "fdb0d284cd684baade43e17fd9820248dcaebb0f",
+      "review": "Since c1711a3, only archived Figma source and scripts were removed. They are already absent from this integration."
+    }
+  ],
+  "rule": "Advance source revisions only after inspecting their diff. Documentation and cursor-only changes do not require another app deployment."
+}
