@@ -33,3 +33,11 @@
 - Build now runs account/discovery tests before Vite, including on Vercel.
 - Reviewed current new source commits: audio fixture pointer and archived Figma deletions only; no additional app behavior to port.
 - Existing account-management deployment rejection remains in force.
+
+### Initial automatic live release verified
+
+- Promoted reviewed integration to origin/Makayla at 58c3033b874de75b816957632ad929664e410b57 without force-pushing.
+- Vercel Production Overview confirmed Makayla and this exact commit as Ready.
+- https://newmusiq-gamma.vercel.app/ returned HTTP 200 with /assets/index-gRXG9t4d.js, matching the verified build.
+- Automation sync-newmusiq-site-updates is ACTIVE every 15 minutes. Computer/app availability is required; this is not instant webhook delivery.
+- The separate experience-admin production deployment remains unapproved and undeployed.

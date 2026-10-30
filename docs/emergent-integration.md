@@ -73,9 +73,10 @@ require explicit approval for that specific deployment. Its prepared source is
 loaded in the Supabase editor, but the function has NOT been deployed. Do not
 bypass that rejection through another deployment method.
 
-The live site still uses Makayla. The integration is not a complete/live feature
-migration until the remaining provider integrations, sensitive function approval
-and authenticated verification are complete.
+The core interface was deployed through Makayla at 58c3033 on 2026-10-30 and
+verified Ready with a public HTTP 200. The full feature migration remains incomplete:
+provider integrations, the sensitive account function and authenticated end-to-end
+verification still need completion. See deployment-change-log.md for evidence.
 
 ## MCP setup
 
