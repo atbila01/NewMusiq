@@ -48,5 +48,6 @@
 - Applied migration 20261030123016 to the existing Supabase project: private grants bound to existing verified identities, current-session validation, authoritative role/membership RPC, and complimentary comment/audio access while retaining artist verification.
 - Replaced metadata-based frontend role checks, disabled role promotion, and removed subscription purchase prompts for complimentary accounts. Existing paid subscriptions were not canceled or modified.
 - Eight account/discovery tests and production build passed. Live database verification passed for both approved identities, an ordinary account and no-account requests; private grants are unreadable by clients and anonymous RPC execution is revoked.
-- Release promotion and exact Vercel production verification pending below.
+- Promoted 586ef79926ff29b70162426b157ff561aa8ec096 to Makayla without force-pushing. Vercel production D9vgaYDuABkGT3YQwNhiiV5MPFMe verified Ready at that exact revision; public HTTP 200 serves /assets/index-BWgcpHrO.js, matching the tested build.
+- A transaction under the authenticated database role confirmed {role: admin, complimentary: true} and successful comment insertion, then rolled back all test data.
 - The separate experience-admin function remains undeployed; its source now also refuses role changes. This change does not enable account deletion, subscription cancellation, People management or unfinished AI services.
