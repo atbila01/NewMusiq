@@ -80,3 +80,12 @@
 - npm test: eight passed. npm run build: passed (existing chunk-size warning).
   Local Windows dependency repair was needed; dependency files are excluded from release.
 - Publication and exact production verification pending below.
+
+### Live verification
+
+- Published reviewed commit 09ca07c70095d5e9cdf0ef0b3bb204c806dffbce to origin/Makayla.
+- Vercel production DXC5hMJXCCERcERPTGYXe6Sz7anP confirmed Ready at that exact SHA.
+- Public HTTP 200 serves index-Qo27fcD4.js and index-tZmEaZuA.css, matching local build.
+- Live /sign-in and /sign-up render; computed wordmark is Fraunces weight 850,
+  with form margin 30px. No account was created and authenticated flows were not retested.
+- Existing backend gaps remain explicit; experience-admin was not deployed.

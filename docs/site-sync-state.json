@@ -4,14 +4,14 @@
     "branch": "Makayla",
     "vercel_project": "new-music/newmusiq",
     "url": "https://newmusiq-gamma.vercel.app/",
-    "last_verified_commit": "ffd4690048d4ad21c58c97f664613289b748f152",
-    "verification": "Vercel production C8DqRfxDh9AS8GvqNqhxC8a6pi3V Ready; exact Makayla commit; public HTTP 200; module /assets/index-WFan1HDb.js"
+    "last_verified_commit": "09ca07c70095d5e9cdf0ef0b3bb204c806dffbce",
+    "verification": "Vercel production DXC5hMJXCCERcERPTGYXe6Sz7anP Ready at exact Makayla revision; public HTTP 200; /assets/index-Qo27fcD4.js and index-tZmEaZuA.css. Live sign-in and sign-up computed styling verified: Fraunces 850, form margin 30px."
   },
   "sources": [
     {
       "repository": "atbila01/NewMusiq",
       "branch": "codex/emergent-integration",
-      "last_reviewed_commit": "ffd4690048d4ad21c58c97f664613289b748f152"
+      "last_reviewed_commit": "09ca07c70095d5e9cdf0ef0b3bb204c806dffbce"
     },
     {
       "repository": "atbila01/NewMusiq",
@@ -23,7 +23,7 @@
       "repository": "MaknCheese04/NewMusiqMLM",
       "branch": "Emergent",
       "last_reviewed_commit": "bdb7fb60d180f54ef5ff99569e09dffff5e814d2",
-      "review": "Ported Fraunces wordmark and account-form spacing into src/experience. Restored archived Figma/generated metadata excluded. Weekly backend MAX_SHARED=1 remains pending: AI weekly chart service unavailable in current backend. Deployment verification pending."
+      "review": "Ported Fraunces wordmark and account-form spacing into src/experience. Restored archived Figma/generated metadata excluded. Weekly backend MAX_SHARED=1 remains pending: AI weekly chart service unavailable in current backend. Frontend release 09ca07c verified Ready and live; backend chart gap remains pending."
     }
   ],
   "rule": "Advance source revisions only after inspecting their diff. Documentation and cursor-only changes do not require another app deployment."
