@@ -22,8 +22,8 @@
     {
       "repository": "MaknCheese04/NewMusiqMLM",
       "branch": "Emergent",
-      "last_reviewed_commit": "fdb0d284cd684baade43e17fd9820248dcaebb0f",
-      "review": "Since c1711a3, only archived Figma source and scripts were removed. They are already absent from this integration."
+      "last_reviewed_commit": "bdb7fb60d180f54ef5ff99569e09dffff5e814d2",
+      "review": "Ported Fraunces wordmark and account-form spacing into src/experience. Restored archived Figma/generated metadata excluded. Weekly backend MAX_SHARED=1 remains pending: AI weekly chart service unavailable in current backend. Deployment verification pending."
     }
   ],
   "rule": "Advance source revisions only after inspecting their diff. Documentation and cursor-only changes do not require another app deployment."

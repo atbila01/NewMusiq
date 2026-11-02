@@ -8,7 +8,7 @@ updates after verification, superseding a brief preview-first answer.
 
 ## Active monitor
 
-Codex heartbeat `sync-newmusiq-site-updates` is active once a day in this
+Codex heartbeat `sync-newmusiq-site-updates` is active every hour in this
 chat. The computer must be awake and the desktop app running for local work.
 This is polling, not an instant webhook. Unsaved edits and ongoing uncommitted
 work are not published; completed work must be committed/pushed first.
@@ -46,15 +46,16 @@ Do not deploy that function through another mechanism to bypass review.
 AI/provider integrations documented in emergent-integration.md remain incomplete;
 automatic updates must not claim they are live until separately connected/tested.
 
-## Daily cadence and commit activity
+## Hourly cadence (2026-11-02)
 
-On 2026-10-30 the user changed monitoring from every 15 minutes to once a day.
-At each daily run, measure unique new source commits over the rolling seven-day
-window using America/New_York day boundaries, divided by seven. Deduplicate shared
-commits and exclude merges, automated sync bookkeeping and documentation-only
-verification commits. Record the measurement and window in the ignored sync
-checkpoint or site-sync-state.json.
+The user changed monitoring to every hour, superseding the daily schedule and
+its commit-volume frequency question. Review both Emergent branches each hour,
+adapt relevant frontend changes, test, publish to Makayla, and verify production.
+Keep quiet when unchanged; report new live updates, failures or required action.
 
-When the average exceeds three commits per day, ask the user what update frequency
-they want. Keep the daily schedule until they answer, and record the pending
-question to avoid asking repeatedly. Unchanged checks remain quiet.
+The 2026-11-02 source review found wordmark typography and account-form spacing
+changes, now ported into src/experience. The fork also tightened its weekly AI
+chart duplicate filter (MAX_SHARED=1). That backend remains unavailable in the
+Supabase-adapted site and is explicitly pending, not integrated or live.
+Restored archived Figma files, generated browser reports, a JPEG and Emergent job
+metadata are not current application changes.

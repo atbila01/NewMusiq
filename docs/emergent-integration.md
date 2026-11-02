@@ -125,3 +125,13 @@ change billing, accounts, map texture or place confirmation.
 Transactional database checks are saved in tests/sql/artist-review.sql. Run in the
 SQL editor; they roll back every fixture and decision. Release verification is
 recorded in deployment-change-log.md.
+
+## Emergent source review (2026-11-02)
+
+Reviewed MaknCheese04/NewMusiqMLM:Emergent bdb7fb60d180f54ef5ff99569e09dffff5e814d2
+against the previous reviewed tree fdb0d28, including its rewritten history.
+Ported Fraunces wordmark styling/font import and closer account-form spacing for
+sign-in and registration. The weekly AI backend MAX_SHARED=1 change remains
+pending because that provider/backend is not connected to the current site.
+Archived Figma assets and generated metadata do not replace the current app.
+The sync heartbeat is now hourly, superseding daily monitoring.

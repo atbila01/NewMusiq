@@ -68,3 +68,15 @@
 - Saved a seven-day rolling average trigger: above three unique source commits per day, ask the user for a new frequency and keep daily checks until they reply.
 - Shared commits, merges and automated documentation/bookkeeping do not inflate the activity count. Quiet notification behavior and existing release restrictions are preserved.
 - Scheduling/documentation change only; no application release is needed.
+
+## 2026-11-02 — Hourly monitoring and Emergent frontend sync
+
+- Updated existing heartbeat sync-newmusiq-site-updates to ACTIVE every hour;
+  preserved its original chat and quiet notification policy. Supersedes daily cadence.
+- Reviewed fork Emergent bdb7fb60d180f54ef5ff99569e09dffff5e814d2 against fdb0d28.
+  Adapted Fraunces wordmark and desktop/mobile account-form spacing into src/experience.
+- Weekly AI duplicate-filter change remains pending because its backend is not connected.
+  Archived Figma/generated artifacts do not replace the current application.
+- npm test: eight passed. npm run build: passed (existing chunk-size warning).
+  Local Windows dependency repair was needed; dependency files are excluded from release.
+- Publication and exact production verification pending below.

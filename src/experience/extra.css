@@ -1188,14 +1188,15 @@
   .browse-copy strong { font-size: 13px; }
 }
 
-/* ---------- Typography (Pacifico wordmark + Yanone Kaffeesatz) ---------- */
+/* ---------- Typography (Fraunces soft-serif wordmark, Benguiat-style + Yanone Kaffeesatz) ---------- */
 body, .login-page, .player-page, .admin-page { font-size-adjust: 0.6; }
 .player-nav a { text-decoration: none; }
 .wordmark, .player-wordmark {
-  font-family: "Pacifico", cursive;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.25;
+  font-family: "Fraunces", "Souvenir", serif;
+  font-weight: 850;
+  font-variation-settings: "SOFT" 0, "WONK" 1, "opsz" 144;
+  letter-spacing: -0.045em;
+  line-height: 1.1;
   font-size-adjust: none;
   background: linear-gradient(100deg, #fbf1dc 0%, #f1d595 40%, #e0b25e 70%, #b8812d 100%);
   background-clip: text;
@@ -1419,3 +1420,6 @@ input[type="range"] { accent-color: #e3b14c; }
 .tour-actions { display: flex; align-items: center; gap: 10px; }
 .tour-actions .text-link { margin-right: auto; font-size: 14px; }
 .tour-actions button:not(.text-link) { height: 40px; margin: 0; padding: 0 20px; font-size: 15px; }
+
+.login-page .form-block { margin-top: 30px; }
+@media (max-width: 760px) { .login-page .form-block { margin-top: 22px; } }
