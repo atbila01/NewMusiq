@@ -10,7 +10,9 @@ has been created. Switch only after its replacement is connected and verified.
 
 Fifteen automated tests and the production build passed locally. Live provider
 generation, database migration/security checks and authenticated end-to-end
-verification remain pending. The provider-choice question is awaiting the user.
+verification remain pending. On 2026-11-03 the user chose OpenAI and saved a
+Production secret in Vercel as `OpenAI_API_Key`. The adapter accepts that exact
+name as well as `OPENAI_API_KEY`; the value was never revealed or copied.
 
 The current adapter uses NewMusiq's existing authenticated Vercel discovery API
 and Supabase. It does not forward NewMusiq account tokens to Emergent or adopt
@@ -57,6 +59,13 @@ a new deployment to take effect.
 Live inspection on 2026-11-02 found no project environment variables. The existing
 discovery endpoint returned HTTP 503, `NewMusiq discovery setup is incomplete.`
 The local `.env` contains public Supabase client configuration only, no AI key.
+
+On 2026-11-03, imported the existing public `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_ANON_KEY` settings into Vercel Production and Preview. The API
+already supports these names for verifying existing account sessions. The
+private cache migration and `SUPABASE_SERVICE_ROLE_KEY` setup still require
+Supabase dashboard access; the in-app session requested sign-in. Activation
+remains off until that setup and a real generation/cache check pass.
 
 ## Release checklist
 

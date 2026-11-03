@@ -5,6 +5,7 @@ const states = JSON.parse(readFileSync(new URL('../node_modules/us-atlas/states-
 const countries = new Set(world.objects.countries.geometries.map(v => v.properties.name));
 const usStates = new Set(states.objects.states.geometries.map(v => v.properties.name));
 const problem = (message, status = 503) => Object.assign(new Error(message), { status });
+const providerKey = () => process.env.OPENAI_API_KEY || process.env.OpenAI_API_Key;
 
 export function weeklyRegion(country, state = '') {
   country = country === 'United States' ? 'United States of America' : country;
@@ -71,7 +72,7 @@ const schema = { type: 'object', additionalProperties: false, required: ['top_so
 export async function generateWeekly(region, week, usedSongs, heritage, fetcher = fetch) {
   const result = await fetcher('https://api.openai.com/v1/responses', {
     method: 'POST', signal: AbortSignal.timeout(75000),
-    headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${providerKey()}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ model: process.env.OPENAI_WEEKLY_MODEL || 'gpt-4.1-mini', store: false,
       tools: [{ type: 'web_search', search_context_size: 'low' }], tool_choice: 'required',
       include: ['web_search_call.action.sources'], max_output_tokens: 6500, max_tool_calls: 3,
@@ -94,7 +95,7 @@ export async function generateWeekly(region, week, usedSongs, heritage, fetcher 
 
 export async function weeklyMusic(region, heritage, store) {
   if (process.env.WEEKLY_MUSIC_ENABLED !== 'true') return { state: 'disabled' };
-  if (!process.env.OPENAI_API_KEY || !store) return { state: 'unavailable', notice: 'Weekly AI picks are awaiting their service connection. Showing regional heritage.' };
+  if (!providerKey() || !store) return { state: 'unavailable', notice: 'Weekly AI picks are awaiting their service connection. Showing regional heritage.' };
   const week = weekId();
   const { data: claim, error } = await store.rpc('weekly_music_claim', { p_region_key: region.region_key, p_week: week });
   if (error || !claim) return { state: 'unavailable', notice: 'Weekly picks are temporarily unavailable. Showing regional heritage.' };

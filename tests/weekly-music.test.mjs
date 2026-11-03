@@ -56,6 +56,24 @@ test('provider request sends region research only, uses search sources and rejec
   } finally { if (oldKey === undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY = oldKey; }
 });
 
+test('the existing Vercel key name works without exposing or re-entering its secret', async () => {
+  const oldKey = process.env.OPENAI_API_KEY, oldAlias = process.env.OpenAI_API_Key;
+  delete process.env.OPENAI_API_KEY;
+  process.env.OpenAI_API_Key = 'test-saved-vercel-key';
+  try {
+    await generateWeekly(weeklyRegion('France'), weekId(), [], [], async (_url, options) => {
+      assert.equal(options.headers.Authorization, 'Bearer test-saved-vercel-key');
+      return new Response(JSON.stringify({ status: 'completed', output: [
+        { type: 'web_search_call', action: { sources: [{ url: source }] } },
+        { type: 'message', content: [{ type: 'output_text', text: JSON.stringify({ top_songs: songs }) }] },
+      ] }));
+    });
+  } finally {
+    if (oldKey === undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY = oldKey;
+    if (oldAlias === undefined) delete process.env.OpenAI_API_Key; else process.env.OpenAI_API_Key = oldAlias;
+  }
+});
+
 test('missing setup, cache hits and busy workers do not spend provider calls or mislabel fallback', async () => {
   const oldEnabled = process.env.WEEKLY_MUSIC_ENABLED, oldKey = process.env.OPENAI_API_KEY;
   try {
