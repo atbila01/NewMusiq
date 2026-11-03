@@ -135,3 +135,14 @@ sign-in and registration. The weekly AI backend MAX_SHARED=1 change remains
 pending because that provider/backend is not connected to the current site.
 Archived Figma assets and generated metadata do not replace the current app.
 The sync heartbeat is now hourly, superseding daily monitoring.
+
+## Temporary weekly service requested (2026-11-02)
+
+The user requested connecting weekly recommendations until a replacement AI
+agent is ready. An OpenAI-backed adapter, private Supabase weekly cache, source
+links, unreviewed AI labels and failure fallback are prepared locally. This
+supersedes the earlier decision to leave implementation out of scope, but does
+not establish live availability. Provider credentials and server configuration
+are missing; the migration has not been applied. See weekly-music-service.md
+for exact connection fields, limits and release checks. Existing canonical
+artist/song records, billing and the experience-admin restriction are unchanged.

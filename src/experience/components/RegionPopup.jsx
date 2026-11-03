@@ -118,10 +118,15 @@ function Overview({ data, onView }) {
         </div>
       </section>
       <section data-testid="region-top-songs">
-        <p className="rp-label">Songs from this region</p>
-        <p className="rp-muted">{data.source || 'Regional picks'} for {data.name}{updated ? ` · refreshed ${updated}` : ""} · videos from YouTube</p>
+        <p className="rp-label">{data.week ? 'Weekly regional picks' : 'Songs from this region'}</p>
+        <p className="rp-muted">{data.source || 'Regional picks'} for {data.name}{data.week ? ` · ${data.week}` : ""}{updated ? ` · refreshed ${updated}` : ""} · videos from YouTube</p>
+        {data.methodology && <p className="rp-muted" data-testid="weekly-methodology">{data.methodology} AI output has not been reviewed by an editor.</p>}
+        {data.notice && <p className="rp-muted" role="status">{data.notice}</p>}
         <div className="rp-list">
-          {data.top_songs.map((s, i) => <SongRow key={i} song={s} rank={i + 1} onOpen={(song) => onView({ type: "video", song })} />)}
+          {data.top_songs.map((s, i) => <div key={i}>
+            <SongRow song={s} rank={i + 1} onOpen={(song) => onView({ type: "video", song })} />
+            {s.source_url && <a className="rp-muted" href={s.source_url} target="_blank" rel="noopener noreferrer">Research source for {s.artist}</a>}
+          </div>)}
         </div>
       </section>
     </div>

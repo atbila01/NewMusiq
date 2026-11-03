@@ -1,5 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { readFileSync } from 'node:fs';
+import { weeklyMusic, weeklyRegion } from '../server/weekly-music.js';
+
+export const config = { maxDuration: 90 };
 
 const heritage = JSON.parse(readFileSync(new URL('./regional-genres.json', import.meta.url), 'utf8'));
 const cache = new Map();
@@ -46,13 +49,23 @@ async function identify(text) {
   return query && query !== 'UNKNOWN' ? search(query) : [];
 }
 async function region(country, state) {
+  const selected = weeklyRegion(country, state);
+  country = selected.country;
+  state = selected.state;
   const regionKey = country === 'United States of America' || country === 'United States' ? `US:${state}` : country;
   const local = heritage.REGIONS[regionKey] || [];
   const stories = local.map(([id]) => ({ id, name: heritage.GENRES[id]?.[0] || id }));
   const seeds = local.flatMap(([, songs]) => songs.map(([artist, title]) => ({ artist, title, local_tie: state || country })));
   const name = state || country;
   // Curated regional history is not represented as a live or AI-generated chart.
-  return { name, region_key: regionKey, heritage: stories, top_songs: seeds.slice(0, 15), top_genres: local.map(([id, songs]) => ({ name: heritage.GENRES[id]?.[0] || id, description: `Music connected to ${name}`, songs: songs.map(([artist, title]) => ({ artist, title })) })), source: 'Regional music heritage', updated_at: null };
+  const store = process.env.SUPABASE_SERVICE_ROLE_KEY ? createClient(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } }) : null;
+  const weekly = await weeklyMusic(selected, stories, store);
+  return { name, region_key: regionKey, heritage: stories,
+    top_songs: seeds.filter(s => s.title).slice(0, 15),
+    top_genres: local.map(([id, songs]) => ({ name: heritage.GENRES[id]?.[0] || id, description: `Music connected to ${name}`, songs: songs.filter(([, title]) => title).map(([artist, title]) => ({ artist, title })) })),
+    source: 'Regional music heritage', updated_at: null,
+    ...(weekly.state === 'ready' ? weekly : { weekly_state: weekly.state, notice: weekly.notice }),
+  };
 }
 export default async function handler(req, res) {
   try {

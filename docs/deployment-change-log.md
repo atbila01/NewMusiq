@@ -89,3 +89,24 @@
 - Live /sign-in and /sign-up render; computed wordmark is Fraunces weight 850,
   with form margin 30px. No account was created and authenticated flows were not retested.
 - Existing backend gaps remain explicit; experience-admin was not deployed.
+
+## 2026-11-02 — Temporary weekly music service prepared
+
+- User requested activating Emergent-style weekly recommendations until a
+  replacement AI agent is ready. Prepared an OpenAI Responses/web-search adapter
+  behind the existing authenticated discovery API, private weekly cache migration,
+  serialized generation and request ceilings, linked sources, unreviewed labels,
+  and dated stale/heritage fallback. No canonical music records are published.
+- Corrected MAX_SHARED interpretation: each new list may retain at most one song
+  already used elsewhere; this does not guarantee globally exclusive songs.
+- Fifteen tests and production build passed locally; existing chunk-size warning.
+- Live Vercel configuration inspection found no project environment variables;
+  unauthenticated discovery currently returns HTTP 503 setup incomplete. Local
+  environment files contain no available AI provider key. Provider selection
+  was requested from the user; no secrets were requested in chat.
+- Activation blocked on provider/server configuration and database application.
+  Supabase MCP calls are not usable in this chat. Migration/SQL permission tests,
+  funded-provider research and authenticated live flow have NOT been verified.
+- Saved on the separate codex/temporary-weekly-music branch, outside hourly-sync
+  monitored branches. Production remains the verified 09ca07c frontend release.
+  Exact configuration and activation checks: weekly-music-service.md.
