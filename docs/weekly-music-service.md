@@ -19,7 +19,7 @@ and Supabase. It does not forward NewMusiq account tokens to Emergent or adopt
 its Clerk/MongoDB accounts. It requires an OpenAI connection because Emergent's
 Python SDK key and separate authenticated endpoint are not configured here.
 
-- Research up to 25 candidate songs with web search and retain up to 15.
+- Research 10-15 candidate songs with web search and retain up to 15.
 - Keep source links returned by the research tool; discard candidates with
   missing/unretrieved links. These links are research references, not a guarantee
   that every AI claim has been independently checked.
@@ -50,7 +50,7 @@ In Vercel project `new-music/newmusiq`, set server-only Production variables:
 | `SUPABASE_SERVICE_ROLE_KEY` | Existing project's server-only key, for the narrow cache RPCs |
 | `OPENAI_API_KEY` | A funded API key; enter directly in Vercel, never chat or Git |
 | `WEEKLY_MUSIC_ENABLED` | `true` once the database and provider checks pass |
-| `OPENAI_WEEKLY_MODEL` | Optional; defaults to `gpt-4.1-mini` |
+| `OPENAI_WEEKLY_MODEL` | Optional; defaults to `gpt-5-mini` |
 
 Never prefix server secrets with `VITE_`. The service-role and OpenAI keys must
 never appear in the browser bundle. Production configuration changes require
@@ -152,4 +152,14 @@ Previously cached selections that fail this check are withheld in favor of
 heritage; no database records are deleted. Source links still require returned
 research evidence. This is a minimum relevance check, not independent editorial
 verification. Output remains unreviewed. Final live checks are pending.
+
+
+### Research quality correction
+
+The first Texas result also included unsupported regional and chart claims.
+Changed the default research model to gpt-5-mini with low reasoning and requested
+10-15 established songs with specific birthplace/formation evidence, excluding
+release-date and popularity claims. Only research_version=2 cache payloads can
+be displayed; earlier test selections remain stored but are withheld. Existing
+retry and spending-attempt limits are preserved, including Texas's three attempts.
 

@@ -49,6 +49,8 @@ test('provider request sends region research only, uses search sources and rejec
       assert.equal(body.store, false);
       assert.equal(body.tool_choice, 'required');
       assert.equal(body.max_tool_calls, 3);
+      assert.equal(body.model, 'gpt-5-mini');
+      assert.equal(body.reasoning.effort, 'low');
       assert.ok(!options.body.includes('user_id'));
       return new Response(JSON.stringify({ status: 'completed', output: [
         { type: 'web_search_call', action: { sources: [{ url: source }] } },
@@ -100,7 +102,7 @@ test('missing setup, cache hits and busy workers do not spend provider calls or 
     delete process.env.OPENAI_API_KEY;
     assert.equal((await weeklyMusic(weeklyRegion('France'), [], null)).state, 'unavailable');
     process.env.OPENAI_API_KEY = 'test';
-    const payload = { week: '2026-W44', top_songs: songs.slice(0, 5), source: 'AI weekly regional picks' };
+    const payload = { research_version: 2, week: '2026-W44', top_songs: songs.slice(0, 5), source: 'AI weekly regional picks' };
     const cached = await weeklyMusic(weeklyRegion('France'), [], { rpc: async () => ({ data: { state: 'cached', payload } }) });
     assert.equal(cached.stale, false);
     const unrelated = await weeklyMusic(weeklyRegion('United States', 'Washington'), [], { rpc: async () => ({ data: { state: 'cached', payload } }) });
@@ -122,7 +124,7 @@ test('generation persists once, while provider failures release the lease and re
   const oldEnabled = process.env.WEEKLY_MUSIC_ENABLED, oldKey = process.env.OPENAI_API_KEY, oldFetch = globalThis.fetch;
   process.env.WEEKLY_MUSIC_ENABLED = 'true';
   process.env.OPENAI_API_KEY = 'test';
-  const previous = { week: '2026-W40', updated_at: '2026-10-01T00:00:00Z', source: 'AI weekly regional picks', top_songs: songs.slice(0, 5) };
+  const previous = { research_version: 2, week: '2026-W40', updated_at: '2026-10-01T00:00:00Z', source: 'AI weekly regional picks', top_songs: songs.slice(0, 5) };
   let writes = [];
   const store = { rpc: async (name, args) => {
     if (name === 'weekly_music_claim') return { data: { state: 'claimed', lease: 'test-lease', used_songs: [], previous } };
