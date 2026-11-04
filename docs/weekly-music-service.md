@@ -131,3 +131,13 @@ consistent with the activation flag no longer equaling true. Restored the flag
 to true and opened the exact OpenAI_API_Key editor for the user to replace the
 write-only key. No secret was read or copied. Awaiting that replacement and a
 redeployment before attempting another provider call.
+
+### Citation compatibility correction (2026-11-04)
+
+The replacement key now reaches completed provider research on Ready deployment
+Cz86hVhUuuVrVQRj2tgTtpLTG8da at ccb0cfe. Texas was rejected by the source
+matching check, so no successful generation is claimed. Source validation now
+accepts returned URL citations and opened research pages, and ignores UTM tags
+and fragments when matching the same page. Other query parameters stay exact.
+Seventeen tests and the production build passed. Live verification is pending.
+

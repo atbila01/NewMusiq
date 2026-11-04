@@ -74,6 +74,19 @@ test('the existing Vercel key name works without exposing or re-entering its sec
   }
 });
 
+test('search citations and opened pages support picks across tracking and fragment variations', async () => {
+  for (const evidence of [
+    { type: 'message', content: [{ type: 'output_text', annotations: [{ type: 'url_citation', url: source + '?utm_source=chatgpt.com#music' }] }] },
+    { type: 'web_search_call', action: { type: 'open_page', url: source } },
+  ]) {
+    const output = [evidence, { type: 'message', content: [{ type: 'output_text', text: JSON.stringify({ top_songs: songs }) }] }];
+    const picks = await generateWeekly(weeklyRegion('France'), weekId(), [], [], async () => new Response(JSON.stringify({ status: 'completed', output })));
+    assert.equal(picks.top_songs.length, 15);
+    assert.equal(picks.top_songs[0].source_url, source);
+  }
+  assert.throws(() => normalizeWeekly({ top_songs: songs }, [], [source + '?different=page']), /not ready/);
+});
+
 test('missing setup, cache hits and busy workers do not spend provider calls or mislabel fallback', async () => {
   const oldEnabled = process.env.WEEKLY_MUSIC_ENABLED, oldKey = process.env.OPENAI_API_KEY;
   try {

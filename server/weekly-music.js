@@ -28,7 +28,13 @@ export function songKey(song) {
 }
 
 function httpsUrl(value) {
-  try { const u = new URL(value); return u.protocol === 'https:' && !u.username && !u.password ? u.href : ''; }
+  try {
+    const u = new URL(value);
+    if (u.protocol !== 'https:' || u.username || u.password) return '';
+    u.hash = '';
+    for (const key of [...u.searchParams.keys()]) if (/^utm_/i.test(key)) u.searchParams.delete(key);
+    return u.href;
+  }
   catch { return ''; }
 }
 
@@ -93,7 +99,9 @@ export async function generateWeekly(region, week, usedSongs, heritage, fetcher 
   const response = await result.json();
   if (response.status !== 'completed') throw Object.assign(problem('The weekly AI research did not finish. Please try again later.', 502), { diagnostic: 'provider_incomplete' });
   const text = (response.output || []).filter(v => v.type === 'message').flatMap(v => v.content || []).filter(v => v.type === 'output_text').map(v => v.text).join('');
-  const sources = (response.output || []).filter(v => v.type === 'web_search_call').flatMap(v => v.action?.sources || []).map(v => v.url);
+  const sources = (response.output || []).flatMap(v => v.type === 'web_search_call'
+    ? [...(v.action?.sources || []).map(s => s.url), ...(v.action?.type === 'open_page' ? [v.action.url] : [])]
+    : v.type === 'message' ? (v.content || []).flatMap(c => (c.annotations || []).filter(a => a.type === 'url_citation').map(a => a.url)) : []);
   let data;
   try { data = JSON.parse(text); } catch { throw problem('The weekly AI response could not be read. Please try again later.', 502); }
   return normalizeWeekly(data, usedSongs, sources);
