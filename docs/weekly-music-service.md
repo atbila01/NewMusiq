@@ -120,3 +120,14 @@ and rerun the regional and repeated-visit checks. The secret is write-only and
 was never revealed in chat. Sixteen tests and the build passed for the deployed
 source. Safe diagnostics log only controlled error codes, never provider error
 messages, prompts or keys. Heritage remains available while the key is corrected.
+
+### Follow-up configuration correction (2026-11-03)
+
+After the user reported an update, Vercel showed a new Ready deployment
+5uVLbn4bFM8AkHUFhEdsbMr1esLB at ccb0cfe. The recent environment edit was on
+WEEKLY_MUSIC_ENABLED; OpenAI_API_Key still showed its original creation time.
+The signed-in Texas request returned heritage without an AI-failure notice,
+consistent with the activation flag no longer equaling true. Restored the flag
+to true and opened the exact OpenAI_API_Key editor for the user to replace the
+write-only key. No secret was read or copied. Awaiting that replacement and a
+redeployment before attempting another provider call.
