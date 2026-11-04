@@ -51,7 +51,7 @@ export function normalizeWeekly(data, usedSongs, sourceUrls) {
     songs.push({ title, artist, genre: String(s.genre || '').slice(0, 60), local_tie: String(s.local_tie || '').slice(0, 180), source_url, review_status: 'unreviewed' });
     if (songs.length === 15) break;
   }
-  if (songs.length < 5) throw problem('This week’s researched picks are not ready. Please try again later.', 502);
+  if (songs.length < 5) throw Object.assign(problem('This week’s researched picks are not ready. Please try again later.', 502), { diagnostic: 'insufficient_researched_sources' });
   const groups = new Map();
   for (const song of songs) {
     if (!song.genre) continue;
@@ -83,9 +83,15 @@ export async function generateWeekly(region, week, usedSongs, heritage, fetcher 
       text: { format: { type: 'json_schema', name: 'weekly_regional_music', strict: true, schema } },
     }),
   });
-  if (!result.ok) throw problem('The weekly AI provider is unavailable. Regional heritage is still available.', 502);
+  if (!result.ok) {
+    const details = await result.json().catch(() => ({}));
+    const code = String(details.error?.code || details.error?.type || 'unknown');
+    throw Object.assign(problem('The weekly AI provider is unavailable. Regional heritage is still available.', 502), {
+      diagnostic: `provider_http_${result.status}`, providerCode: /^[a-zA-Z0-9_-]{1,80}$/.test(code) ? code : 'unknown',
+    });
+  }
   const response = await result.json();
-  if (response.status !== 'completed') throw problem('The weekly AI research did not finish. Please try again later.', 502);
+  if (response.status !== 'completed') throw Object.assign(problem('The weekly AI research did not finish. Please try again later.', 502), { diagnostic: 'provider_incomplete' });
   const text = (response.output || []).filter(v => v.type === 'message').flatMap(v => v.content || []).filter(v => v.type === 'output_text').map(v => v.text).join('');
   const sources = (response.output || []).filter(v => v.type === 'web_search_call').flatMap(v => v.action?.sources || []).map(v => v.url);
   let data;
@@ -108,7 +114,10 @@ export async function weeklyMusic(region, heritage, store) {
     const saved = await store.rpc('weekly_music_finish', { p_region_key: region.region_key, p_week: week, p_lease: claim.lease, p_payload: payload });
     if (saved.error || saved.data !== true) throw problem('The weekly list could not be saved.');
     return { ...payload, state: 'ready', stale: false };
-  } catch {
+  } catch (error) {
+    // Log controlled codes only: never provider messages, request bodies or keys.
+    console.warn('weekly_music_generation_failed', JSON.stringify({ region: region.region_key,
+      reason: error.diagnostic || (error.name === 'TimeoutError' ? 'provider_timeout' : 'generation_failed'), providerCode: error.providerCode || null }));
     await store.rpc('weekly_music_finish', { p_region_key: region.region_key, p_week: week, p_lease: claim.lease, p_payload: null });
     return claim.previous ? { ...claim.previous, state: 'ready', stale: true, notice: 'The weekly refresh is unavailable. Showing the previous selection.' }
       : { state: 'unavailable', notice: 'Weekly AI picks are temporarily unavailable. Showing regional heritage.' };
