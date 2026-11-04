@@ -57,7 +57,9 @@ export function normalizeWeekly(data, usedSongs, sourceUrls) {
     songs.push({ title, artist, genre: String(s.genre || '').slice(0, 60), local_tie: String(s.local_tie || '').slice(0, 180), source_url, review_status: 'unreviewed' });
     if (songs.length === 15) break;
   }
-  if (songs.length < 5) throw Object.assign(problem('This week’s researched picks are not ready. Please try again later.', 502), { diagnostic: 'insufficient_researched_sources' });
+  if (songs.length < 5) throw Object.assign(problem('This week’s researched picks are not ready. Please try again later.', 502), {
+    diagnostic: 'insufficient_researched_sources', counts: { candidates: data?.top_songs?.length || 0, sources: sources.size, retained: songs.length },
+  });
   const groups = new Map();
   for (const song of songs) {
     if (!song.genre) continue;
@@ -125,7 +127,7 @@ export async function weeklyMusic(region, heritage, store) {
   } catch (error) {
     // Log controlled codes only: never provider messages, request bodies or keys.
     console.warn('weekly_music_generation_failed', JSON.stringify({ region: region.region_key,
-      reason: error.diagnostic || (error.name === 'TimeoutError' ? 'provider_timeout' : 'generation_failed'), providerCode: error.providerCode || null }));
+      reason: error.diagnostic || (error.name === 'TimeoutError' ? 'provider_timeout' : 'generation_failed'), providerCode: error.providerCode || null, counts: error.counts || null }));
     await store.rpc('weekly_music_finish', { p_region_key: region.region_key, p_week: week, p_lease: claim.lease, p_payload: null });
     return claim.previous ? { ...claim.previous, state: 'ready', stale: true, notice: 'The weekly refresh is unavailable. Showing the previous selection.' }
       : { state: 'unavailable', notice: 'Weekly AI picks are temporarily unavailable. Showing regional heritage.' };
