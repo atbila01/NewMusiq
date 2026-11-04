@@ -141,3 +141,15 @@ accepts returned URL citations and opened research pages, and ignores UTM tags
 and fragments when matching the same page. Other query parameters stay exact.
 Seventeen tests and the production build passed. Live verification is pending.
 
+
+### Regional quality verification (2026-11-04)
+
+44bf8fc reached Ready Production as 6YxNxpoVRoMAENeK33tDzYrsCXkX.
+Washington generated and saved ten sourced picks, but the regional claims were
+too broad. The adapter now requires each local connection to name the requested
+region and prompts for documented birthplace, band formation or residence.
+Previously cached selections that fail this check are withheld in favor of
+heritage; no database records are deleted. Source links still require returned
+research evidence. This is a minimum relevance check, not independent editorial
+verification. Output remains unreviewed. Final live checks are pending.
+

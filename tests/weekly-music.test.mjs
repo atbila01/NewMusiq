@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { weekId, weeklyRegion, songKey, normalizeWeekly, generateWeekly, weeklyMusic } from '../server/weekly-music.js';
 
 const source = 'https://example.org/texas-music';
-const songs = Array.from({ length: 25 }, (_, i) => ({ title: `Song ${i}`, artist: `Artist ${i}`, genre: i % 2 ? 'Country' : 'Blues', local_tie: 'Local musician', source_url: source }));
+const songs = Array.from({ length: 25 }, (_, i) => ({ title: `Song ${i}`, artist: `Artist ${i}`, genre: i % 2 ? 'Country' : 'Blues', local_tie: 'Texas-born musician based in France', source_url: source }));
 
 test('weekly region accepts globe names and rejects arbitrary cost-generating inputs', () => {
   assert.equal(weeklyRegion('United States', 'Texas').region_key, 'US:Texas');
@@ -32,6 +32,10 @@ test('unretrieved, insecure and invented source URLs cannot become weekly picks'
   for (const url of ['javascript:alert(1)', 'http://example.org/music', 'https://invented.org/']) {
     assert.throws(() => normalizeWeekly({ top_songs: songs.map(s => ({ ...s, source_url: url })) }, [], [source]), /not ready/);
   }
+});
+
+test('national popularity cannot substitute for a requested state connection', () => {
+  assert.throws(() => normalizeWeekly({ top_songs: songs.map(s => ({ ...s, local_tie: 'Popular across the United States' })) }, [], [source], 'Washington'), /not ready/);
 });
 
 test('provider request sends region research only, uses search sources and rejects incomplete output', async () => {
@@ -99,6 +103,9 @@ test('missing setup, cache hits and busy workers do not spend provider calls or 
     const payload = { week: '2026-W44', top_songs: songs.slice(0, 5), source: 'AI weekly regional picks' };
     const cached = await weeklyMusic(weeklyRegion('France'), [], { rpc: async () => ({ data: { state: 'cached', payload } }) });
     assert.equal(cached.stale, false);
+    const unrelated = await weeklyMusic(weeklyRegion('United States', 'Washington'), [], { rpc: async () => ({ data: { state: 'cached', payload } }) });
+    assert.equal(unrelated.state, 'unavailable');
+    assert.ok(!unrelated.top_songs);
     const stale = await weeklyMusic(weeklyRegion('France'), [], { rpc: async () => ({ data: { state: 'waiting', previous: payload } }) });
     assert.equal(stale.stale, true);
     assert.equal(stale.week, payload.week);
