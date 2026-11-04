@@ -146,3 +146,12 @@ not establish live availability. Provider credentials and server configuration
 are missing; the migration has not been applied. See weekly-music-service.md
 for exact connection fields, limits and release checks. Existing canonical
 artist/song records, billing and the experience-admin restriction are unchanged.
+
+### Weekly activation setup (2026-11-03)
+
+Applied and registered migration 20261102200000 after a rollback-only dry run and
+cache/security checks passed. Configured existing public Supabase settings,
+user-supplied OpenAI secret, explicitly approved Supabase server secret and weekly
+activation flag in Vercel. Sixteen tests and production build passed. Production
+deployment and authenticated generation/cache verification remain pending;
+configuration alone does not establish a working live provider.

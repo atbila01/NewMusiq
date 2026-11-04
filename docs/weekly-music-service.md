@@ -6,11 +6,11 @@ Connect Emergent's weekly regional recommendations until the replacement AI agen
 is ready. This is an interim service; do not disable it merely because an agent
 has been created. Switch only after its replacement is connected and verified.
 
-## Prepared, not yet live
+## Activation in progress (2026-11-03)
 
-Fifteen automated tests and the production build passed locally. Live provider
-generation, database migration/security checks and authenticated end-to-end
-verification remain pending. On 2026-11-03 the user chose OpenAI and saved a
+Sixteen automated tests and the production build passed locally. Live provider
+generation and authenticated end-to-end verification remain pending.
+On 2026-11-03 the user chose OpenAI and saved a
 Production secret in Vercel as `OpenAI_API_Key`. The adapter accepts that exact
 name as well as `OPENAI_API_KEY`; the value was never revealed or copied.
 
@@ -63,9 +63,18 @@ The local `.env` contains public Supabase client configuration only, no AI key.
 On 2026-11-03, imported the existing public `VITE_SUPABASE_URL` and
 `VITE_SUPABASE_ANON_KEY` settings into Vercel Production and Preview. The API
 already supports these names for verifying existing account sessions. The
-private cache migration and `SUPABASE_SERVICE_ROLE_KEY` setup still require
-Supabase dashboard access; the in-app session requested sign-in. Activation
-remains off until that setup and a real generation/cache check pass.
+private cache migration was applied on 2026-11-03 after a successful transactional
+dry run. Grant checks, singleton worker leasing, invalid-lease rejection, retry
+cooldown and the daily ceiling passed, with every test fixture rolled back.
+The schema migration was registered as 20261102200000. Both private tables have
+RLS; anonymous/member roles cannot execute cache generation or completion.
+
+The user explicitly approved transferring the existing Supabase server secret
+directly into Vercel Production `SUPABASE_SERVICE_ROLE_KEY`. It was saved without
+displaying it in chat or writing it to Git. `WEEKLY_MUSIC_ENABLED=true` is also
+saved for Production, effective on the next deployment. Advisor review found zero
+errors and seven warnings affecting older catalog policies/password protection;
+none names the new cache or RPCs. Production release verification is still pending.
 
 ## Release checklist
 

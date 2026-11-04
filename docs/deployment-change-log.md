@@ -110,3 +110,18 @@
 - Saved on the separate codex/temporary-weekly-music branch, outside hourly-sync
   monitored branches. Production remains the verified 09ca07c frontend release.
   Exact configuration and activation checks: weekly-music-service.md.
+
+## 2026-11-03 — Weekly service activation setup
+
+- User selected OpenAI and saved Production secret OpenAI_API_Key. Adapter accepts
+  that name without revealing, renaming or re-entering the user’s secret.
+- Imported existing public VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY into
+  Vercel Production/Preview; this resolves the previously missing server config
+  after redeployment.
+- Applied and registered 20261102200000 after transactional checks passed and
+  test fixtures rolled back. Private cache RLS and service-only RPC grants verified.
+- With explicit user approval, saved existing Supabase server key directly as
+  Production SUPABASE_SERVICE_ROLE_KEY and WEEKLY_MUSIC_ENABLED=true. No keys in Git.
+- Advisor review: zero errors; seven warnings concern older catalog policies and
+  password protection, none the new cache/functions. Authenticated live tests and
+  exact production revision verification pending below.
