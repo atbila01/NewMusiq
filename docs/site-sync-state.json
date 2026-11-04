@@ -4,8 +4,8 @@
     "branch": "Makayla",
     "vercel_project": "new-music/newmusiq",
     "url": "https://newmusiq-gamma.vercel.app/",
-    "last_verified_commit": "4139bd6cb877d79b56c43e59577677618f0cd988",
-    "verification": "Vercel Production BEbun21DyeDt9H9Xi6Qb8VbtCSR2 Ready at exact Makayla revision; public HTTP 200; /assets/index-C6LsVhX-.js and index-tZmEaZuA.css. Weekly cache installed and settings enabled. Discovery returns 401 when signed out. Actual AI generation/cache-hit verification awaiting signed-in browser."
+    "last_verified_commit": "ccb0cfe91d32aaebfa80cda5873241df49ba1265",
+    "verification": "Vercel Production 5aSRiNi7spjgqs6X6DsSYqRAsDCc Ready at exact Makayla revision; public HTTP 200; tested frontend assets. Supabase cache installed and configured. Signed-in Texas and California correctly fall back to heritage; OpenAI returns HTTP 401 invalid_api_key. AI generation NOT working until the saved OpenAI_API_Key secret is replaced and redeployed."
   },
   "sources": [
     {
@@ -23,7 +23,7 @@
       "repository": "MaknCheese04/NewMusiqMLM",
       "branch": "Emergent",
       "last_reviewed_commit": "bdb7fb60d180f54ef5ff99569e09dffff5e814d2",
-      "review": "Ported Fraunces wordmark and account-form spacing into src/experience. Restored archived Figma/generated metadata excluded. Weekly backend MAX_SHARED=1 remains pending: AI weekly chart service unavailable in current backend. Frontend release 09ca07c verified Ready and live; backend chart gap remains pending."
+      "review": "Ported Fraunces wordmark/account spacing. Adapted weekly MAX_SHARED=1 semantics into the Supabase-backed weekly service. Migration and server setup applied; provider activation is blocked by OpenAI 401 invalid_api_key, not working AI generation. Archived Figma/generated metadata excluded."
     }
   ],
   "rule": "Advance source revisions only after inspecting their diff. Documentation and cursor-only changes do not require another app deployment."

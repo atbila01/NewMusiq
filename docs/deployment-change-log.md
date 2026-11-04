@@ -135,3 +135,15 @@
 - Weekly feature flag and provider/cache credentials are configured. Real AI
   generation and repeated-request cache verification remain pending because
   the in-app NewMusiq session still shows sign-in. No working-provider claim yet.
+
+### Provider blocker confirmed in the signed-in live flow
+
+- Published ccb0cfe91d32aaebfa80cda5873241df49ba1265 (safe diagnostics); all sixteen
+  tests and production build passed. Vercel production 5aSRiNi7spjgqs6X6DsSYqRAsDCc
+  is Ready at that exact Makayla commit.
+- Signed-in Texas and California requests reached the weekly cache and returned
+  the explicitly labeled heritage fallback. California runtime log:
+  provider_http_401 / invalid_api_key. No generated weekly list was saved.
+- Supabase/database and deployment setup completed. AI activation remains blocked
+  on replacing the rejected OpenAI_API_Key Production secret with a valid API key,
+  followed by redeployment and generation/cache-hit checks. No successful-AI claim.

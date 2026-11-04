@@ -59,3 +59,12 @@ chart duplicate filter (MAX_SHARED=1). That backend remains unavailable in the
 Supabase-adapted site and is explicitly pending, not integrated or live.
 Restored archived Figma files, generated browser reports, a JPEG and Emergent job
 metadata are not current application changes.
+
+## Weekly service activation status (2026-11-03)
+
+The temporary weekly adapter and private cache are deployed. MAX_SHARED=1 means
+at most one previously used song per new list, not globally exclusive songs.
+Live provider verification is blocked: OpenAI rejected the saved Production key
+with HTTP 401 invalid_api_key. Preserve the heritage fallback and do not describe
+weekly AI selections as working until a replacement key and live generation pass.
+See weekly-music-service.md for exact setup, limits and pending verification.

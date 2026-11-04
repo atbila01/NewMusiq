@@ -104,3 +104,19 @@ or deletion is configured.
 - [OpenAI web search](https://developers.openai.com/api/docs/guides/tools-web-search)
 - [OpenAI structured output](https://developers.openai.com/api/docs/guides/structured-outputs)
 - [Supabase server secrets](https://supabase.com/docs/guides/functions/secrets)
+
+## Live activation result (2026-11-03)
+
+Production ccb0cfe91d32aaebfa80cda5873241df49ba1265 is Ready as Vercel
+5aSRiNi7spjgqs6X6DsSYqRAsDCc. Supabase cache and Production settings are installed.
+The signed-in account selected Texas and California through place confirmation.
+Both live requests reached the private cache and fell back to heritage. The
+California runtime diagnostic confirms `provider_http_401`, `invalid_api_key`.
+The saved OpenAI_API_Key secret is rejected by OpenAI. No AI recommendations were
+successfully generated, and cache-hit verification remains unfulfilled.
+
+Replace that secret securely in Vercel using a valid OpenAI API key, then redeploy
+and rerun the regional and repeated-visit checks. The secret is write-only and
+was never revealed in chat. Sixteen tests and the build passed for the deployed
+source. Safe diagnostics log only controlled error codes, never provider error
+messages, prompts or keys. Heritage remains available while the key is corrected.
