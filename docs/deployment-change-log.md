@@ -125,3 +125,13 @@
 - Advisor review: zero errors; seven warnings concern older catalog policies and
   password protection, none the new cache/functions. Authenticated live tests and
   exact production revision verification pending below.
+
+### Production rollout verified; provider flow pending
+
+- Makayla 4139bd6cb877d79b56c43e59577677618f0cd988 is Ready on Vercel production
+  BEbun21DyeDt9H9Xi6Qb8VbtCSR2. Public HTTP 200 serves index-C6LsVhX-.js and
+  index-tZmEaZuA.css, matching the tested build.
+- Signed-out discovery returns HTTP 401, replacing the prior setup-incomplete 503.
+- Weekly feature flag and provider/cache credentials are configured. Real AI
+  generation and repeated-request cache verification remain pending because
+  the in-app NewMusiq session still shows sign-in. No working-provider claim yet.
