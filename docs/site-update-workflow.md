@@ -68,3 +68,12 @@ Live provider verification is blocked: OpenAI rejected the saved Production key
 with HTTP 401 invalid_api_key. Preserve the heritage fallback and do not describe
 weekly AI selections as working until a replacement key and live generation pass.
 See weekly-music-service.md for exact setup, limits and pending verification.
+
+### Superseding activation result (2026-11-04)
+
+The replacement OpenAI key is accepted. Ready Production 3b52bfa includes source
+citation matching and research-quality checks; earlier weak trial lists are
+withheld. Final revised-model verification is blocked by OpenAI HTTP 429
+credit_balance_exhausted. Heritage remains available; do not claim the revised
+weekly generation or cache-hit flow is verified until API credit is added and
+those checks pass. See weekly-music-service.md for retry-limit implications.

@@ -163,3 +163,18 @@ release-date and popularity claims. Only research_version=2 cache payloads can
 be displayed; earlier test selections remain stored but are withheld. Existing
 retry and spending-attempt limits are preserved, including Texas's three attempts.
 
+
+## Current live status (2026-11-04)
+
+3b52bfaf3f49d404889937b32a363d02d559e608 is Ready, Current Production as
+Vercel 5kxriofwNBs22PHMFfn2Z1Vaz2r4. The public signed-in website loads.
+Eighteen tests and the production build passed. The replacement key is accepted.
+The final California request returned provider_http_429 / credit_balance_exhausted.
+No further paid research calls were attempted after that response. User must
+add API credit before final quality, regional generation and repeat-cache checks.
+Earlier Texas/Washington trials were saved but failed content-quality review;
+the new research_version=2 gate withholds those payloads without deleting them.
+Texas and California have used their three region/week attempts. Do not bypass
+these limits; use an untested region for post-funding verification or wait for
+the next UTC ISO week. Successful generation with the revised model remains
+unverified. The temporary service is configured and enabled, with heritage fallback.

@@ -155,3 +155,11 @@ user-supplied OpenAI secret, explicitly approved Supabase server secret and week
 activation flag in Vercel. Sixteen tests and production build passed. Production
 deployment and authenticated generation/cache verification remain pending;
 configuration alone does not establish a working live provider.
+
+### Temporary weekly service follow-up (2026-11-04)
+
+The server connection and private cache are deployed, with source citations and
+unreviewed AI labels. Ready Production 3b52bfa withholds early unsuitable trial
+lists and improves regional research. The corrected API key works, but OpenAI
+now returns credit_balance_exhausted. Revised-model live generation and cache-hit
+verification remain pending funding. Heritage fallback remains available.
