@@ -163,3 +163,12 @@ unreviewed AI labels. Ready Production 3b52bfa withholds early unsuitable trial
 lists and improves regional research. The corrected API key works, but OpenAI
 now returns credit_balance_exhausted. Revised-model live generation and cache-hit
 verification remain pending funding. Heritage fallback remains available.
+
+### Funded weekly verification passed (2026-11-05)
+
+The funding blocker above is superseded. Production 6eda41f was Ready/Current.
+Signed-in New York (eight picks) and Louisiana (ten picks) generated sourced,
+explicitly unreviewed weekly selections. A full reload and repeat New York visit
+reused the same saved timestamp without increasing its generation attempt count.
+This verifies the temporary generation/cache path, not canonical chart accuracy.
+The temporary service stays enabled pending a connected, verified replacement.

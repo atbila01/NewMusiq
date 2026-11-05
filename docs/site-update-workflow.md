@@ -77,3 +77,12 @@ withheld. Final revised-model verification is blocked by OpenAI HTTP 429
 credit_balance_exhausted. Heritage remains available; do not claim the revised
 weekly generation or cache-hit flow is verified until API credit is added and
 those checks pass. See weekly-music-service.md for retry-limit implications.
+
+### Funded activation verified (2026-11-05)
+
+The API credit blocker is resolved. On Ready/Current production 6eda41f, signed-in
+New York and Louisiana generated eight and ten sourced weekly picks respectively.
+A reloaded New York repeat visit returned the same saved timestamp with attempts=1,
+verifying cache reuse. No environment/source changes were necessary. The temporary
+service remains enabled until a replacement is connected and verified. Earlier
+Texas/California/Washington trials stay withheld, with retry limits preserved.

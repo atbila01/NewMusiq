@@ -6,9 +6,9 @@ Connect Emergent's weekly regional recommendations until the replacement AI agen
 is ready. This is an interim service; do not disable it merely because an agent
 has been created. Switch only after its replacement is connected and verified.
 
-## Activation in progress (2026-11-03)
+## Activation history (2026-11-03)
 
-Sixteen automated tests and the production build passed locally. Live provider
+At this stage, sixteen automated tests and the production build passed locally. Live provider
 generation and authenticated end-to-end verification remain pending.
 On 2026-11-03 the user chose OpenAI and saved a
 Production secret in Vercel as `OpenAI_API_Key`. The adapter accepts that exact
@@ -164,7 +164,7 @@ be displayed; earlier test selections remain stored but are withheld. Existing
 retry and spending-attempt limits are preserved, including Texas's three attempts.
 
 
-## Current live status (2026-11-04)
+## Historical funding blocker (2026-11-04)
 
 3b52bfaf3f49d404889937b32a363d02d559e608 is Ready, Current Production as
 Vercel 5kxriofwNBs22PHMFfn2Z1Vaz2r4. The public signed-in website loads.
@@ -178,3 +178,22 @@ Texas and California have used their three region/week attempts. Do not bypass
 these limits; use an untested region for post-funding verification or wait for
 the next UTC ISO week. Successful generation with the revised model remains
 unverified. The temporary service is configured and enabled, with heritage fallback.
+
+## Funded live verification (2026-11-05)
+
+The user confirmed funding. Production 6eda41f57a1b09657126696194cdf587efe5a66c
+was Ready and Current as Ei2YipjYppuCwsWMv8uPqYnDJzRY. Using the signed-in
+public globe and explicit place confirmation, New York generated eight sourced
+picks with research_version=2 for 2026-W45, saved at 2026-11-05T23:07:35.251Z.
+The page displayed source links, the weekly date, methodology and unreviewed label.
+After a full page reload and a second confirmed New York visit, the same list
+returned with attempts=1 and exactly the same saved timestamp: a live cache hit.
+The API-credit blocker is resolved. No source or environment changes were required.
+Earlier Texas, California and Washington trial payloads remain withheld; existing
+retry limits and the next-week refresh are preserved.
+
+Louisiana independently generated ten sourced picks, research_version=2, saved
+at 2026-11-05T23:08:48.274Z, with attempts=1. Both funded lists have specific
+regional connections and no claimed chart positions. New York repeat-cache and
+both regional live-generation checks passed; individual recommendations remain
+unreviewed AI output, not independently fact-checked canonical catalog data.
