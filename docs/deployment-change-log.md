@@ -147,3 +147,14 @@
 - Supabase/database and deployment setup completed. AI activation remains blocked
   on replacing the rejected OpenAI_API_Key Production secret with a valid API key,
   followed by redeployment and generation/cache-hit checks. No successful-AI claim.
+
+## 2026-11-12 — Shared Google Tag Manager snippet
+
+- Added the user-supplied GTM-TPH39XLP script and dataLayer/gtag initialization
+  to the shared index.html head. Existing and future application routes inherit
+  it through the common entry point; documented separate-entry-point handling.
+- All 18 tests and the Vite production build passed using direct Node commands
+  equivalent to the package scripts (npm is unavailable on this machine).
+  Built HTML contains the snippet once. Existing large-chunk warning remains.
+- Production deployment verification pending after publishing this commit.
+  Container tag configuration and analytics event delivery are not verified.

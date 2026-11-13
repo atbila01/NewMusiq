@@ -22,6 +22,12 @@ Production is the existing Vercel project `new-music/newmusiq`, tracking
 
 ## Integration and delivery rules
 
+The shared root `index.html` loads Google Tag Manager container `GTM-TPH39XLP`
+and initializes `window.dataLayer`/`gtag`. All current and future application
+routes use this entry point, including direct page loads through Vercel's
+rewrite. Keep this snippet in the shared head; do not duplicate it per route.
+Any future separate HTML entry point must include the same snippet.
+
 1. Fetch source commits and inspect their actual changes. Port Emergent frontend
    updates from frontend/src to src/experience with the existing alias/auth
    adaptations. Its raw backend uses different accounts/data and cannot be
