@@ -158,3 +158,11 @@
   Built HTML contains the snippet once. Existing large-chunk warning remains.
 - Production deployment verification pending after publishing this commit.
   Container tag configuration and analytics event delivery are not verified.
+
+### Google Tag Manager production verification
+
+- Source revision 6beaa9fd4cfb63e59c1675c0a960140ebc5432f3 received Vercel
+  success / Deployment has completed for new-music/newmusiq deployment
+  GdqbPbfAFzWypHF3Lsbt5Hc5mzy4.
+- Public /, /search and /library each returned HTTP 200 and exactly one
+  GTM-TPH39XLP snippet. Analytics event delivery was not tested.
